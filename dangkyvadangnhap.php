@@ -67,10 +67,15 @@
 											$password = md5($password);
 											$querysql = mysqli_query($con, "SELECT * FROM user WHERE username = '$username' AND passworduser = '$password'");
 											if (mysqli_num_rows($querysql) > 0) {
+												$result = mysqli_fetch_assoc($querysql);
+												if($result['status'] == 0) {
 												$_SESSION["user"] = $username;
 												mysqli_close($con);
 												echo "<script type='text/javascript'>alert('Xin chào');</script>";
 												header('location:Main.php');
+												} else {
+													echo "<script type='text/javascript'>alert('Tài khoản của bạn đang bị khóa vui lòng liên hệ vói quản trị viên');</script>";
+												}
 											} else {
 												echo "Bạn đã nhập sai tài khoản hoặc mật khẩu";
 											}
