@@ -56,19 +56,29 @@
         </div>
         <ul class="navbar-nav px-3">
           <li class="nav-item text-nowrap">
-            <a class="nav-link" href="giohang.php">Giỏ hàng</a>
+            <a class="nav-link" href="giohang.html">Giỏ hàng</a>
           </li>
-          <li class="nav-item text-nowrap">
+          <?php 
+            session_start();
+            if(isset($_SESSION['user'])) {
+          ?>
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false"><i class="fas fa-user"></i> <?= $_SESSION['user']; ?></a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Thông Tin</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="dangxuat.php"><i class="fas fa-sign-out-alt"> </i>Đăng Xuất</a></li>
+              </ul>
+            </li>
+          <?php } else { ?>
+            <li class="nav-item text-nowrap">
             <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
-            <?php 
-              session_start();
-              if(isset($_SESSION['user'])) {
-            ?>
-            <a class="nav-link" href=""><?=$_SESSION['user']; ?></a>
-            <?php } else { ?>
             <a class="nav-link" href="dangkyvadangnhap.php">Đăng nhập</a>
-            <?php } ?>
           </li>
+          <?php } ?>
         </ul>
       </div>
     </nav>

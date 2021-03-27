@@ -50,7 +50,7 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="login-form" action="dangkyvadangnhap.php?action=login" method="post" role="form" style="display: block;">
+								<form id="login-form" action="dangkyvadangnhap.php?action=login" method="post" role="form" style="display: block; ">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -68,6 +68,8 @@
 											$querysql = mysqli_query($con, "SELECT * FROM user WHERE username = '$username' AND passworduser = '$password'");
 											if (mysqli_num_rows($querysql) > 0) {
 												$_SESSION["user"] = $username;
+												mysqli_close($con);
+												echo "<script type='text/javascript'>alert('Xin chào');</script>";
 												header('location:Main.php');
 											} else {
 												echo "Bạn đã nhập sai tài khoản hoặc mật khẩu";
@@ -77,35 +79,35 @@
 										}
 									}
 									?>
-										<div class="form-group text-center">
-											<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-											<label for="remember"> Remember Me</label>
+									<div class="form-group text-center">
+										<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+										<label for="remember"> Remember Me</label>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+											</div>
 										</div>
-										<div class="form-group">
-											<div class="row">
-												<div class="col-sm-6 col-sm-offset-3">
-													<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="text-center">
+													<a href="https://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
-											<div class="row">
-												<div class="col-lg-12">
-													<div class="text-center">
-														<a href="https://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
-													</div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-lg-3">
-													<div class="text-center">
-														<a href="Main.php" tabindex="5">Trở về trang chủ</a>
-													</div>
+										<div class="row">
+											<div class="col-lg-3">
+												<div class="text-center">
+													<a href="Main.php" tabindex="5">Trở về trang chủ</a>
 												</div>
 											</div>
 										</div>
+									</div>
 								</form>
-								<form id="register-form" action="https://phpoll.com/register/process" method="post" role="form" style="display: none;">
+								<form id="register-form" action="dangkyvadangnhap.php?action=register" method="post" role="form" style="display: none;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -118,6 +120,34 @@
 									<div class="form-group">
 										<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
 									</div>
+									<?php
+									include 'connect_db.php';
+									if (isset($_GET['action']) && $_GET['action'] == "register") {
+										if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['confirm-password'])) {
+											echo "Xin điền đầy đủ thông tin";
+											if ($_POST['password'] != $_POST['confirm-password']) {
+												echo "Password không trùng nhau";
+											}
+										} else {
+											$usernamerg = $_POST['username'];
+											$email = $_POST['email'];
+											$passwordrg = $_POST['password'];
+											$passwordrg = md5($passwordrg);
+											$query = mysqli_query($con, "SELECT username FROM user WHERE username = '$usernamerg'");
+											if (mysqli_num_rows($query) > 0) {
+												echo "Tên đăng nhập đã có người sử dụng";
+											} else {
+												$queryrg = mysqli_query($con, "INSERT INTO user VALUES ('NULL','$usernamerg','$email','$passwordrg','NULL','NULL')");
+												if (!$queryrg) {
+													echo 'Tạo không thành công!!!';
+												} else {
+													mysqli_close($con);
+													echo "<script type='text/javascript'>alert('Chúc mừng bạn đã tạo tài khoản thành công');</script>";
+												}
+											}
+										}
+									}
+									?>
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
@@ -140,9 +170,9 @@
 			</div>
 		</div>
 	</div>
-<!-- dong dang ky va dang nhap -->
-<script src="js/bootstrap.js"></script>
-<script src="js/dangkyvadangnhap.js"></script>
+	<!-- dong dang ky va dang nhap -->
+	<script src="js/bootstrap.js"></script>
+	<script src="js/dangkyvadangnhap.js"></script>
 </body>
 
 </html>

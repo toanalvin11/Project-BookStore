@@ -59,8 +59,12 @@
             <a class="nav-link" href="">Giỏ hàng</a>
           </li>
           <li class="nav-item text-nowrap">
-            <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
-            <a class="nav-link" href="">Đăng nhập</a>
+          <?php 
+              session_start();
+              if(isset($_SESSION['user'])) {
+            ?>
+            <a class="nav-link" href=""><?=$_SESSION['user']; ?></a>
+            <?php } ?>
           </li>
         </ul>
       </div>
