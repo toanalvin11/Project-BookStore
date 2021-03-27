@@ -61,18 +61,18 @@
 									session_start();
 									include 'connect_db.php';
 									if (isset($_GET['action']) && $_GET['action'] == "login") {
-										if ($_POST['username'] && $_POST['password']) {
+										if (!empty($_POST['username']) && !empty($_POST['password'])) {
 											$username = $_POST['username'];
 											$password = $_POST['password'];
 											$password = md5($password);
 											$querysql = mysqli_query($con, "SELECT * FROM user WHERE username = '$username' AND passworduser = '$password'");
 											if (mysqli_num_rows($querysql) > 0) {
 												$result = mysqli_fetch_assoc($querysql);
-												if($result['status'] == 0) {
-												$_SESSION["user"] = $username;
-												mysqli_close($con);
-												echo "<script type='text/javascript'>alert('Xin chào');</script>";
-												header('location:Main.php');
+												if ($result['status'] == 0) {
+													$_SESSION["user"] = $username;
+													mysqli_close($con);
+													echo "<script type='text/javascript'>alert('Xin chào');</script>";
+													header('location:Main.php');
 												} else {
 													echo "<script type='text/javascript'>alert('Tài khoản của bạn đang bị khóa vui lòng liên hệ vói quản trị viên');</script>";
 												}
@@ -130,15 +130,16 @@
 									if (isset($_GET['action']) && $_GET['action'] == "register") {
 										if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['confirm-password'])) {
 											echo "Xin điền đầy đủ thông tin";
+										} else {
 											if ($_POST['password'] != $_POST['confirm-password']) {
 												echo "Password không trùng nhau";
+											} else {
+												$usernamerg = $_POST['username'];
+												$email = $_POST['email'];
+												$passwordrg = $_POST['password'];
+												$passwordrg = md5($passwordrg);
+												$query = mysqli_query($con, "SELECT username FROM user WHERE username = '$usernamerg'");
 											}
-										} else {
-											$usernamerg = $_POST['username'];
-											$email = $_POST['email'];
-											$passwordrg = $_POST['password'];
-											$passwordrg = md5($passwordrg);
-											$query = mysqli_query($con, "SELECT username FROM user WHERE username = '$usernamerg'");
 											if (mysqli_num_rows($query) > 0) {
 												echo "Tên đăng nhập đã có người sử dụng";
 											} else {
