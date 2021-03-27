@@ -16,7 +16,7 @@
   <div class="menu">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="Main.html"><img src="image/logo.png" alt="..." width="100px"></a>
+        <a class="navbar-brand" href="Main.php"><img src="image/logo.png" alt="..." width="100px"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -24,10 +24,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="Main.html">Trang chủ</a>
+              <a class="nav-link active" aria-current="page" href="Main.php">Trang chủ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin.html">Quản trị</a>
+              <a class="nav-link" href="admin.php">Quản trị</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -133,7 +133,7 @@
           </td>
         </tr>
         <tr>
-          <td><a href="Main.html" class="btn btn-success"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
+          <td><a href="Main.php" class="btn btn-success"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
           </td>
           <td colspan="2" class="hidden-xs"> </td>
           <td class="hidden-xs text-center"><strong>Tổng tiền 500.000 đ</strong>

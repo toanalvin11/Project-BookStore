@@ -24,10 +24,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="Main.html">Trang chủ</a>
+              <a class="nav-link active" aria-current="page" href="Main.php">Trang chủ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin.html">Quản trị</a>
+              <a class="nav-link" href="admin.php">Quản trị</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -60,6 +60,7 @@
           </li>
           <li class="nav-item text-nowrap">
             <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
+
             <a class="nav-link" href="dangkyvadangnhap.html">Đăng nhập</a>
           </li>
         </ul>
