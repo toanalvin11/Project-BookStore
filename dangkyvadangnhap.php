@@ -60,7 +60,8 @@
 									<?php
 									session_start();
 									include 'connect_db.php';
-									if (isset($_GET['action']) && $_GET['action'] == "login") {
+									if (isset($_GET['action']) && $_GET['action'] == "login" && isset($_POST['login-submit'])) {
+										//kiểm tra tên tài khoản đã điền vào chưa
 										if (!empty($_POST['username']) && !empty($_POST['password'])) {
 											$username = $_POST['username'];
 											$password = $_POST['password'];
@@ -68,7 +69,8 @@
 											$querysql = mysqli_query($con, "SELECT * FROM user WHERE username = '$username' AND passworduser = '$password'");
 											if (mysqli_num_rows($querysql) > 0) {
 												$result = mysqli_fetch_assoc($querysql);
-												if ($result['status'] == 0) {
+												// 0 là bình thương 1 là tài khoản đang bị vô hiệu hóa
+												if ($result['status'] != 1) {
 													$_SESSION["user"] = $username;
 													mysqli_close($con);
 													echo "<script type='text/javascript'>alert('Xin chào');</script>";
@@ -127,7 +129,7 @@
 									</div>
 									<?php
 									include 'connect_db.php';
-									if (isset($_GET['action']) && $_GET['action'] == "register") {
+									if (isset($_GET['action']) && $_GET['action'] == "register" && isset($_POST['register-submit'])) {
 										if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['confirm-password'])) {
 											echo "Xin điền đầy đủ thông tin";
 										} else {
