@@ -102,7 +102,7 @@
     <div class="row mt-5">
       <h2 class="list-product-title">Book Shelf</h2>
       <div class="list-product-subtile">
-        <p>Doc sach di</p>
+        <p>Hay doc sach</p>
       </div>
 
       <div class="product-group">
