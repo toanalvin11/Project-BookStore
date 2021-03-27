@@ -56,12 +56,18 @@
         </div>
         <ul class="navbar-nav px-3">
           <li class="nav-item text-nowrap">
-            <a class="nav-link" href="giohang.html">Giỏ hàng</a>
+            <a class="nav-link" href="giohang.php">Giỏ hàng</a>
           </li>
           <li class="nav-item text-nowrap">
             <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
-
-            <a class="nav-link" href="dangkyvadangnhap.html">Đăng nhập</a>
+            <?php 
+              session_start();
+              if(isset($_SESSION['user'])) {
+            ?>
+            <a class="nav-link" href=""><?=$_SESSION['user']; ?></a>
+            <?php } else { ?>
+            <a class="nav-link" href="dangkyvadangnhap.php">Đăng nhập</a>
+            <?php } ?>
           </li>
         </ul>
       </div>
