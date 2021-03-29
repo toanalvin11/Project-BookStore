@@ -71,7 +71,7 @@
           if (isset($_SESSION['user'])) {
           ?>
             <li class="nav-item text-nowrap">
-              <a class="nav-link" href="checkusergiohang.php">Giỏ hàng</a>
+              <a class="nav-link" href="checkusergiohang.php"><i class="fas fa-shopping-cart"></i> Giỏ hàng</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> <?= $_SESSION['user']; ?></a>
@@ -85,7 +85,7 @@
             </li>
           <?php } else { ?>
             <li class="nav-item text-nowrap">
-              <a class="nav-link" id="login2" href="#">Giỏ hàng</a>
+              <a class="nav-link" id="login2" href="#"><i class="fas fa-shopping-cart"></i> Giỏ hàng</a>
             </li>
             <li class="nav-item text-nowrap">
               <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
@@ -260,6 +260,25 @@
         </div>
       </div>
     </div>
+
+  </div>
+  <!-- Phan trang -->
+  <div class="container">
+  <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item active" aria-current="page">
+      <a class="page-link" href="#">2 <span class="visually-hidden">(current)</span></a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
   </div>
   <!-- End product -->
   <!-- Footer -->

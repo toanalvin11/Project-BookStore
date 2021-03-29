@@ -133,25 +133,25 @@
 										if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['confirm-password'])) {
 											echo "Xin điền đầy đủ thông tin";
 										} else {
-											if ($_POST['password'] != $_POST['confirm-password']) {
-												echo "Password không trùng nhau";
-											} else {
+											if ($_POST['password'] == $_POST['confirm-password']) {
 												$usernamerg = $_POST['username'];
 												$email = $_POST['email'];
 												$passwordrg = $_POST['password'];
 												$passwordrg = md5($passwordrg);
 												$query = mysqli_query($con, "SELECT username FROM user WHERE username = '$usernamerg'");
-											}
-											if (mysqli_num_rows($query) > 0) {
-												echo "Tên đăng nhập đã có người sử dụng";
-											} else {
-												$queryrg = mysqli_query($con, "INSERT INTO user VALUES ('NULL','$usernamerg','$email','$passwordrg','NULL','NULL')");
-												if (!$queryrg) {
-													echo 'Tạo không thành công!!!';
+												if (mysqli_num_rows($query) > 0) {
+													echo "Tên đăng nhập đã có người sử dụng";
 												} else {
-													mysqli_close($con);
-													echo "<script type='text/javascript'>alert('Chúc mừng bạn đã tạo tài khoản thành công');</script>";
+													$queryrg = mysqli_query($con, "INSERT INTO user VALUES ('NULL','$usernamerg','$email','$passwordrg','NULL','NULL')");
+													if (!$queryrg) {
+														echo 'Tạo không thành công!!!';
+													} else {
+														mysqli_close($con);
+														echo "<script type='text/javascript'>alert('Chúc mừng bạn đã tạo tài khoản thành công');</script>";
+													}
 												}
+											} else {
+												echo "Password không trùng nhau";
 											}
 										}
 									}
