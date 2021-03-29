@@ -24,7 +24,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="Main.html">Trang chủ</a>
+              <a class="nav-link active" aria-current="page" href="Main.php">Trang chủ</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#" onclick="listsanpham();">Sản Phẩm</a>
@@ -39,12 +39,12 @@
 
           <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-              <a class="nav-link" href="giohang.html">Xin Chào Quản Trị Viên</a>
+              <a class="nav-link" href="">Xin Chào Quản Trị Viên</a>
             </li>
             <li class="nav-item text-nowrap">
               <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
               <a type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light"
-                href="dangkyvadangnhap.html">Đăng Xuất</a>
+                href="dangkyvadangnhap.php">Đăng Xuất</a>
             </li>
           </ul>
         </div>
