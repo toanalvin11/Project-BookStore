@@ -25,9 +25,23 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="Main.php">Trang chủ</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="admin.php">Quản trị</a>
-            </li>
+            <?php
+            include 'connect_db.php';
+            session_start();
+            if (isset($_SESSION['user'])) {
+              $user = $_SESSION['user'];
+              $query = mysqli_query($con, "SELECT * FROM user WHERE username = '$user'");
+              if (mysqli_num_rows($query) > 0) {
+                $result = mysqli_fetch_assoc($query);
+                // Chi co trang thai status la 1 thi moi vao duoc trang admin
+                if (isset($result['status']) && $result['status'] == 1) {
+            ?>
+                  <li class="nav-item">
+                    <a class="nav-link" href="admin.php">Quản trị</a>
+                  </li>
+            <?php }
+              }
+            } ?>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Thể Loại</a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -54,7 +68,6 @@
         </div>
         <ul class="navbar-nav px-3">
           <?php
-          session_start();
           if (isset($_SESSION['user'])) {
           ?>
             <li class="nav-item text-nowrap">

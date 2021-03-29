@@ -69,8 +69,8 @@
 											$querysql = mysqli_query($con, "SELECT * FROM user WHERE username = '$username' AND passworduser = '$password'");
 											if (mysqli_num_rows($querysql) > 0) {
 												$result = mysqli_fetch_assoc($querysql);
-												// 0 là bình thương 1 là tài khoản đang bị vô hiệu hóa
-												if ($result['status'] != 1) {
+												// 0 là admin 1 là tài khoản bình thường 2 là tài khoản đang bị vô hiệu hóa
+												if ($result['status'] != 2) {
 													$_SESSION["user"] = $username;
 													mysqli_close($con);
 													echo "<script type='text/javascript'>alert('Xin chào');</script>";
