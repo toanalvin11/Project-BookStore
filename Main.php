@@ -134,153 +134,50 @@
       <div class="list-product-subtile">
         <p>New Book New Life</p>
       </div>
-
       <div class="product-group">
         <div class="row">
+          <?php 
+            include 'connect_db.php';
+            $product = mysqli_query($con,"SELECT * FROM products LIMIT 8 OFFSET 0");
+            while($row = mysqli_fetch_array($product)) {
+           ?>
           <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3">
-              <img src="https://via.placeholder.com/280" class="card-img-top" alt="...">
+            <div class="card card-product mb-3" style="width: 18rem;">
+              <img src="<?=$row['image']?>" class="card-img-top" alt="...">
               <div class="card-body">
-                <h5 class="card-title product-title">Product</h5>
+                <h5 class="card-title product-title"><?=$row['name_product'] ?></h5>
                 <div class="card-text product-price">
                   <span class="del-price">100.000 vnd</span>
-                  <span class="new-price">80.000 vnd</span>
+                  <span class="new-price"><?=$row['price'] ?></span>
                 </div>
                 <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
                 <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
               </div>
             </div>
           </div>
-
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3">
-              <img src="https://via.placeholder.com/280" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title product-title">Product</h5>
-                <div class="card-text product-price">
-                  <span class="del-price">100.000 vnd</span>
-                  <span class="new-price">80.000 vnd</span>
-                </div>
-                <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3">
-              <img src="https://via.placeholder.com/280" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title product-title">Product</h5>
-                <div class="card-text product-price">
-                  <span class="del-price">100.000 vnd</span>
-                  <span class="new-price">80.000 vnd</span>
-                </div>
-                <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3">
-              <img src="https://via.placeholder.com/280" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title product-title">Product</h5>
-                <div class="card-text product-price">
-                  <span class="del-price">100.000 vnd</span>
-                  <span class="new-price">80.000 vnd</span>
-                </div>
-                <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3">
-              <img src="https://via.placeholder.com/280" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title product-title">Product</h5>
-                <div class="card-text product-price">
-                  <span class="del-price">100.000 vnd</span>
-                  <span class="new-price">80.000 vnd</span>
-                </div>
-                <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3">
-              <img src="https://via.placeholder.com/280" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title product-title">Product</h5>
-                <div class="card-text product-price">
-                  <span class="del-price">100.000 vnd</span>
-                  <span class="new-price">80.000 vnd</span>
-                </div>
-                <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3">
-              <img src="https://via.placeholder.com/280" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title product-title">Product</h5>
-                <div class="card-text product-price">
-                  <span class="del-price">100.000 vnd</span>
-                  <span class="new-price">80.000 vnd</span>
-                </div>
-                <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3">
-              <img src="https://via.placeholder.com/280" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title product-title">Product</h5>
-                <div class="card-text product-price">
-                  <span class="del-price">100.000 vnd</span>
-                  <span class="new-price">80.000 vnd</span>
-                </div>
-                <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
-              </div>
-            </div>
-          </div>
+          <?php } ?>
+          
 
         </div>
       </div>
     </div>
-
-  </div>
-  <!-- Phan trang -->
-  <div class="container">
-  <nav aria-label="...">
-  <ul class="pagination">
-    <li class="page-item disabled">
-      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item active" aria-current="page">
-      <a class="page-link" href="#">2 <span class="visually-hidden">(current)</span></a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#">Next</a>
-    </li>
-  </ul>
-</nav>
   </div>
   <!-- End product -->
+  <!-- Phan trang -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+  <!-- End phan trang -->
   <!-- Footer -->
   <footer class="bg-dark text-center text-white">
     <!-- Grid container -->

@@ -50,7 +50,7 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="login-form" action="dangkyvadangnhap.php?action=login" method="post" role="form" style="display: block; ">
+								<form id="login-form" action="?action=login" method="post" role="form" style="display: block; ">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -73,16 +73,15 @@
 												if ($result['status'] != 2) {
 													$_SESSION["user"] = $username;
 													mysqli_close($con);
-													echo "<script type='text/javascript'>alert('Xin chào');</script>";
 													header('location:Main.php');
 												} else {
 													echo "<script type='text/javascript'>alert('Tài khoản của bạn đang bị khóa vui lòng liên hệ vói quản trị viên');</script>";
 												}
 											} else {
-												echo "Bạn đã nhập sai tài khoản hoặc mật khẩu";
+												echo "<span>*Bạn đã nhập sai tài khoản hoặc mật khẩu</span>";
 											}
 										} else {
-											echo "Xin mới điền vào thông tin đăng nhập";
+											echo "<span>*Xin mới điền vào thông tin đăng nhập</span>";
 										}
 									}
 									?>
@@ -114,7 +113,7 @@
 										</div>
 									</div>
 								</form>
-								<form id="register-form" action="dangkyvadangnhap.php?action=register" method="post" role="form" style="display: none;">
+								<form id="register-form" action="?action=register" method="post" role="form" style="display: none;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
