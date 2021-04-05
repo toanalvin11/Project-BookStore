@@ -150,7 +150,7 @@
           ?>
             <div class="col-md-3 col-sm-6 col-12">
               <div class="card card-product mb-3" style="width: 18rem;">
-                <img src="<?= $row['image'] ?>" class="card-img-top" alt="...">
+                <img src="image/<?= $row['image'] ?>" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title product-title"><?= $row['name_product'] ?></h5>
                   <div class="card-text product-price">
