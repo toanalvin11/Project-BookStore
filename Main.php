@@ -144,8 +144,8 @@
 
           $sanpham = mysqli_query($con, "SELECT * FROM products LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
           $tongsotrang = mysqli_query($con, "SELECT * FROM products");
-          $sotrang = mysqli_num_rows($tongsotrang);
-          $sotrang = ceil($sotrang / $sosanphamtrongtrang);
+          $tongsosp = mysqli_num_rows($tongsotrang);
+          $sotrang = ceil($tongsosp / $sosanphamtrongtrang);
           while ($row = mysqli_fetch_array($sanpham)) {
           ?>
             <div class="col-md-3 col-sm-6 col-12">
@@ -173,16 +173,25 @@
   <!-- Phan trang -->
   <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-      </li>
-      <?php for ($num = 1; $num <= $sotrang; $num++) { ?>
-        <li class="page-item"><a class="page-link" href="?page=<?= $tranghientai ?>"><?= $num ?></a></li>
+      <?php if ($tranghientai > 1) { ?>
+        <li class="page-item">
+          <a class="page-link" href="?page=<?= $tranghientai-1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
       <?php } ?>
-
-      <li class="page-item">
-        <a class="page-link" href="#">Next</a>
-      </li>
+      <?php for ($num = 1; $num <= $sotrang; $num++) { ?>
+        <?php if ($num != $tranghientai) { ?>
+          <?php if ($num > $tranghientai - 3 && $num < $tranghientai + 3) { ?>
+            <li class="page-item"><a class="page-link" href="?page=<?= $num ?>"><?= $num ?></a></li>
+          <?php } ?>
+        <?php } else { ?>
+          <li class="page-item"><strong class="page-link" href=""><?= $num ?></strong></li>
+        <?php } ?>
+      <?php } ?>
+      <?php if ($tranghientai < $sotrang ) { ?>
+        <li class="page-item">
+          <a class="page-link" href="?page=<?= $tranghientai+1 ?>">Next</a>
+        </li>
+      <?php } ?>
     </ul>
   </nav>
   <!-- End phan trang -->
