@@ -136,27 +136,34 @@
       </div>
       <div class="product-group">
         <div class="row">
-          <?php 
-            include 'connect_db.php';
-            $product = mysqli_query($con,"SELECT * FROM products LIMIT 8 OFFSET 0");
-            while($row = mysqli_fetch_array($product)) {
-           ?>
-          <div class="col-md-3 col-sm-6 col-12">
-            <div class="card card-product mb-3" style="width: 18rem;">
-              <img src="<?=$row['image']?>" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title product-title"><?=$row['name_product'] ?></h5>
-                <div class="card-text product-price">
-                  <span class="del-price">100.000 vnd</span>
-                  <span class="new-price"><?=$row['price'] ?></span>
+          <?php
+          include 'connect_db.php';
+          $sosanphamtrongtrang = 12;
+          $tranghientai = !empty($_GET['page']) ? $_GET['page'] : 1;
+          $offset = ($tranghientai - 1) * $sosanphamtrongtrang;
+
+          $sanpham = mysqli_query($con, "SELECT * FROM products LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
+          $tongsotrang = mysqli_query($con, "SELECT * FROM products");
+          $sotrang = mysqli_num_rows($tongsotrang);
+          $sotrang = ceil($sotrang / $sosanphamtrongtrang);
+          while ($row = mysqli_fetch_array($sanpham)) {
+          ?>
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="card card-product mb-3" style="width: 18rem;">
+                <img src="<?= $row['image'] ?>" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title product-title"><?= $row['name_product'] ?></h5>
+                  <div class="card-text product-price">
+                    <span class="del-price">100.000 vnd</span>
+                    <span class="new-price"><?= $row['price'] ?></span>
+                  </div>
+                  <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
+                  <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
                 </div>
-                <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
               </div>
             </div>
-          </div>
           <?php } ?>
-          
+
 
         </div>
       </div>
@@ -169,9 +176,10 @@
       <li class="page-item disabled">
         <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
       </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <?php for ($num = 1; $num <= $sotrang; $num++) { ?>
+        <li class="page-item"><a class="page-link" href="?page=<?= $tranghientai ?>"><?= $num ?></a></li>
+      <?php } ?>
+
       <li class="page-item">
         <a class="page-link" href="#">Next</a>
       </li>
