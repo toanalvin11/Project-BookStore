@@ -12,6 +12,7 @@
 </head>
 
 <body>
+
   <!-- Open menu -->
   <div class="menu">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -61,8 +62,8 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <form class="d-flex" method="GET">
+            <input class="form-control me-2" name="text" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_GET['text']) ? $_GET['text'] : ""; ?>">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
         </div>
@@ -137,13 +138,21 @@
       <div class="product-group">
         <div class="row">
           <?php
+          $search = isset($_GET['text']) ? $_GET['text'] : "";
+
           include 'connect_db.php';
           $sosanphamtrongtrang = 12;
           $tranghientai = !empty($_GET['page']) ? $_GET['page'] : 1;
           $offset = ($tranghientai - 1) * $sosanphamtrongtrang;
 
-          $sanpham = mysqli_query($con, "SELECT * FROM products LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
-          $tongsotrang = mysqli_query($con, "SELECT * FROM products");
+          if ($search) {
+            $sanpham = mysqli_query($con, "SELECT * FROM products WHERE name_product LIKE '%$search%' LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
+            $tongsotrang = mysqli_query($con, "SELECT * FROM products WHERE name_product LIKE '%$search%'");
+          } else {
+            $sanpham = mysqli_query($con, "SELECT * FROM products LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
+            $tongsotrang = mysqli_query($con, "SELECT * FROM products");
+          }
+
           $tongsosp = mysqli_num_rows($tongsotrang);
           $sotrang = ceil($tongsosp / $sosanphamtrongtrang);
           while ($row = mysqli_fetch_array($sanpham)) {
@@ -154,7 +163,7 @@
                 <div class="card-body">
                   <h5 class="card-title product-title"><?= $row['name_product'] ?></h5>
                   <div class="card-text product-price">
-                    <span class="del-price">100.000 vnd</span>
+                    <!-- <span class="del-price">100.000 vnd</span> -->
                     <span class="new-price"><?= $row['price'] ?></span>
                   </div>
                   <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
@@ -163,8 +172,6 @@
               </div>
             </div>
           <?php } ?>
-
-
         </div>
       </div>
     </div>
@@ -173,23 +180,28 @@
   <!-- Phan trang -->
   <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-      <?php if ($tranghientai > 1) { ?>
+      <?php
+      $para = "";
+      if($search) {
+        $para = "text=".$search;
+      }
+      if ($tranghientai > 1) { ?>
         <li class="page-item">
-          <a class="page-link" href="?page=<?= $tranghientai-1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
+          <a class="page-link" href="?page=<?= $tranghientai - 1 ?>&<?=$para?>" tabindex="-1" aria-disabled="true">Previous</a>
         </li>
       <?php } ?>
       <?php for ($num = 1; $num <= $sotrang; $num++) { ?>
         <?php if ($num != $tranghientai) { ?>
           <?php if ($num > $tranghientai - 3 && $num < $tranghientai + 3) { ?>
-            <li class="page-item"><a class="page-link" href="?page=<?= $num ?>"><?= $num ?></a></li>
+            <li class="page-item"><a class="page-link" href="?page=<?= $num ?>&<?=$para?>"><?= $num ?></a></li>
           <?php } ?>
         <?php } else { ?>
           <li class="page-item"><strong class="page-link" href=""><?= $num ?></strong></li>
         <?php } ?>
       <?php } ?>
-      <?php if ($tranghientai < $sotrang ) { ?>
+      <?php if ($tranghientai < $sotrang) { ?>
         <li class="page-item">
-          <a class="page-link" href="?page=<?= $tranghientai+1 ?>">Next</a>
+          <a class="page-link" href="?page=<?= $tranghientai + 1 ?>&<?=$para?>">Next</a>
         </li>
       <?php } ?>
     </ul>
