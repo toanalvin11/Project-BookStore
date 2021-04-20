@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Store</title>
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
   <link rel="stylesheet" href="font-awesome/css/all.css">
 </head>
 
@@ -35,7 +35,7 @@
               if (mysqli_num_rows($query) > 0) {
                 $result = mysqli_fetch_assoc($query);
                 // Chi co trang thai status la 1 thi moi vao duoc trang admin
-                if (isset($result['status']) && $result['status'] == 1) {
+                if (isset($result['status']) && $result['status'] == 0) {
             ?>
                   <li class="nav-item">
                     <a class="nav-link" href="admin.php">Quản trị</a>
@@ -46,24 +46,22 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Thể Loại</a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Truyện ngắn - tản văn</a></li>
-                <li><a class="dropdown-item" href="#">Tiểu thuyết</a></li>
-                <li><a class="dropdown-item" href="#">Truyện dài</a></li>
-                <li><a class="dropdown-item" href="#">Truyện tranh </a></li>
-                <li><a class="dropdown-item" href="#">Tâm lý học</a></li>
-                <li><a class="dropdown-item" href="#">Sách kỹ năng sống</a></li>
-                <li><a class="dropdown-item" href="#">Sách chuyên ngành </a></li>
-                <li><a class="dropdown-item" href="#"> Sách giáo khoa </a></li>
-                <li><a class="dropdown-item" href="#"> Sách nấu ăn </a></li>
+                <?php
+                $sql = mysqli_query($con, "SELECT * FROM category");
+                if (mysqli_num_rows($sql) > 0) {
+                  while ($category = mysqli_fetch_array($sql)) {
+                ?>
+                    <li><a class="dropdown-item" href="?theloai=<?= $category['id_category'] ?>"><?= $category['category_name'] ?></a></li>
+                <?php }
+                } ?>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>
             </li>
           </ul>
           <form class="d-flex" method="GET">
-            <input class="form-control me-2" name="text" type="text" placeholder="Search" aria-label="Search" value="<?= isset($_GET['text']) ? $_GET['text'] : ""; ?>">
+            <input class="form-control me-2" name="text" type="Search" placeholder="Search" aria-label="Search" value="<?= isset($_GET['text']) ? $_GET['text'] : ""; ?>">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
         </div>
@@ -138,14 +136,17 @@
       <div class="product-group">
         <div class="row">
           <?php
+          $theloai = isset($_GET['theloai']) ? $_GET['theloai'] : "";
           $search = isset($_GET['text']) ? $_GET['text'] : "";
 
-          include 'connect_db.php';
+
           $sosanphamtrongtrang = 12;
           $tranghientai = !empty($_GET['page']) ? $_GET['page'] : 1;
           $offset = ($tranghientai - 1) * $sosanphamtrongtrang;
-
-          if ($search) {
+          if ($theloai) {
+            $sanpham = mysqli_query($con, "SELECT * FROM products WHERE id_category = '$theloai' LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
+            $tongsotrang = mysqli_query($con, "SELECT * FROM products WHERE id_category = '$theloai'");
+          } else if ($search) {
             $sanpham = mysqli_query($con, "SELECT * FROM products WHERE name_product LIKE '%$search%' LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
             $tongsotrang = mysqli_query($con, "SELECT * FROM products WHERE name_product LIKE '%$search%'");
           } else {
@@ -155,22 +156,26 @@
 
           $tongsosp = mysqli_num_rows($tongsotrang);
           $sotrang = ceil($tongsosp / $sosanphamtrongtrang);
-          while ($row = mysqli_fetch_array($sanpham)) {
+          if ($tongsosp > 0) {
+            while ($row = mysqli_fetch_array($sanpham)) {
           ?>
-            <div class="col-md-3 col-sm-6 col-12">
-              <div class="card card-product mb-3" style="width: 18rem;">
-                <img src="image/<?= $row['image'] ?>" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title product-title"><?= $row['name_product'] ?></h5>
-                  <div class="card-text product-price">
-                    <!-- <span class="del-price">100.000 vnd</span> -->
-                    <span class="new-price"><?= $row['price'] ?></span>
+              <div class="col-md-3 col-sm-6 col-12" style="margin: 30px 0px;cursor: pointer; ">
+                <div class="card card-product mb-3" style="width: 18rem;">
+                  <img id="anh" src="image/<?= $row['image'] ?>" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title product-title"><?= $row['name_product'] ?></h5>
+                    <div class="card-text product-price">
+                      <!-- <span class="del-price"><?= $row['price'] + 15000 ?> VNĐ</span> -->
+                      <span class="new-price"><?= $row['price'] ?></span><strong> VNĐ</strong>
+                    </div>
+                    <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
+                    <a class="btn btn-outline-info btn-hover" href="chitietsp.php?sanpham=<?= $row['id_product']?>">Xem chi tiết</a>
                   </div>
-                  <a class="btn btn-info btn-icon-bg"><i class="fas fa-shopping-cart"></i></a>
-                  <a class="btn btn-outline-info btn-hover">Xem chi tiết</a>
                 </div>
               </div>
-            </div>
+            <?php }
+          } else { ?>
+            <h2 style="margin: 300px 30px 30px;">  Không tìm thấy sản phẩm</h2>
           <?php } ?>
         </div>
       </div>
@@ -182,18 +187,22 @@
     <ul class="pagination justify-content-center">
       <?php
       $para = "";
-      if($search) {
-        $para = "text=".$search;
+      $para1 = "";
+      if ($theloai) {
+        $para1 = "&theloai=" . $theloai;
+      }
+      if ($search) {
+        $para = "&text=" . $search;
       }
       if ($tranghientai > 1) { ?>
         <li class="page-item">
-          <a class="page-link" href="?page=<?= $tranghientai - 1 ?>&<?=$para?>" tabindex="-1" aria-disabled="true">Previous</a>
+          <a class="page-link" href="?page=<?= $tranghientai - 1 ?><?= $para ?><?= $para1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
         </li>
       <?php } ?>
       <?php for ($num = 1; $num <= $sotrang; $num++) { ?>
         <?php if ($num != $tranghientai) { ?>
           <?php if ($num > $tranghientai - 3 && $num < $tranghientai + 3) { ?>
-            <li class="page-item"><a class="page-link" href="?page=<?= $num ?>&<?=$para?>"><?= $num ?></a></li>
+            <li class="page-item"><a class="page-link" href="?page=<?= $num ?><?= $para ?><?= $para1 ?>"><?= $num ?></a></li>
           <?php } ?>
         <?php } else { ?>
           <li class="page-item"><strong class="page-link" href=""><?= $num ?></strong></li>
@@ -201,7 +210,7 @@
       <?php } ?>
       <?php if ($tranghientai < $sotrang) { ?>
         <li class="page-item">
-          <a class="page-link" href="?page=<?= $tranghientai + 1 ?>&<?=$para?>">Next</a>
+          <a class="page-link" href="?page=<?= $tranghientai + 1 ?><?= $para ?><?= $para1 ?>">Next</a>
         </li>
       <?php } ?>
     </ul>
@@ -214,22 +223,22 @@
       <!-- Section: Social media -->
       <section class="mb-4">
         <!-- Facebook -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-facebook-f"></i></a>
+        <a class="btn btn-outline-light btn-floating m-1" href="https://www.facebook.com/" role="button"><i class="fab fa-facebook-f"></i></a>
 
         <!-- Twitter -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-twitter"></i></a>
+        <a class="btn btn-outline-light btn-floating m-1" href="https://twitter.com/twister" role="button"><i class="fab fa-twitter"></i></a>
 
         <!-- Google -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-google"></i></a>
+        <a class="btn btn-outline-light btn-floating m-1" href="https://www.google.com/" role="button"><i class="fab fa-google"></i></a>
 
         <!-- Instagram -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-instagram"></i></a>
+        <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/" role="button"><i class="fab fa-instagram"></i></a>
 
         <!-- Linkedin -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-linkedin-in"></i></a>
+        <a class="btn btn-outline-light btn-floating m-1" href="https://au.linkedin.com/" role="button"><i class="fab fa-linkedin-in"></i></a>
 
         <!-- Github -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-github"></i></a>
+        <a class="btn btn-outline-light btn-floating m-1" href="https://github.com/" role="button"><i class="fab fa-github"></i></a>
       </section>
       <!-- Section: Social media -->
     </div>

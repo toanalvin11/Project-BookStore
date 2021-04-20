@@ -44,7 +44,7 @@
             <li class="nav-item text-nowrap">
               <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
               <a type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light"
-                href="dangkyvadangnhap.php">Đăng Xuất</a>
+                href="./dangxuat.php">Đăng Xuất</a>
             </li>
           </ul>
         </div>
@@ -56,7 +56,7 @@
       <div class="left">
         <div class="list-group">
           <a href="#" class="list-group-item list-group-item-action active bg-dark">
-            <strong>Danh sách Sản Phẩm</strong>
+            <strong>Quản lý sản phẩm</strong>
           </a>
           <a href="#" class="list-group-item list-group-item-action" onclick="addproduct();">Thêm sản phẩm</a>
           <a href="#" class="list-group-item list-group-item-action" onclick="xoasanpham();">Xóa sản phẩm</a>
