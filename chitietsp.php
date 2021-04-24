@@ -20,11 +20,10 @@
   include './connect_db.php';
   $chitiet = isset($_GET['sanpham']) ? $_GET['sanpham'] : "";
   $sql = mysqli_query($con, "SELECT * FROM products WHERE id_product = $chitiet");
-  $rows = mysqli_num_rows($sql);
-  $result = mysqli_fetch_array($sql);
   ?>
   <!-- Container -->
-  <?php if ($rows > 0) {
+  <?php if (mysqli_num_rows($sql) > 0) {
+    $result = mysqli_fetch_array($sql);
   ?>
     <div class="container my-5 py-5 z-depth-1">
 
@@ -116,27 +115,28 @@
                 <p class="grey-text">
                   <strong>Số lượng :</strong>
                 </p>
-                <div class="form-group">
-                  <input type="number" value="1">
-                </div>
-                <div class="row mt-3 mb-4">
-                  <div class="col-md-12 text-center text-md-left text-md-right">
-                    <button class="btn btn-primary btn-rounded">
-                      <i class="fas fa-cart-plus mr-2" aria-hidden="true"></i> Add to cart</button>
+                <form action="giohang.php?action=add" method="POST">
+                  <div class="form-group">
+                    <input type="number" value="1" name="quanlity[<?= $result['id_product'] ?>]">
                   </div>
-                </div>
+                  <div class="row mt-3 mb-4">
+                    <div class="col-md-12 text-center text-md-left text-md-right">
+                      <button class="btn btn-primary btn-rounded">
+                        <i class="fas fa-cart-plus mr-2" aria-hidden="true"></i> Add to cart</button>
+                    </div>
+                  </div>
+                </form>
               </div>
-
             </div>
-
           </div>
         </div>
-
       </section>
       <!--Section: Content-->
 
 
     </div>
+  <?php } else { ?>
+    <h2>Không có thông tin để hiển thị </h2>
   <?php } ?>
   <!-- Footer -->
   <footer class="bg-dark text-center text-white">

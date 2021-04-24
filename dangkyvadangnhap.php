@@ -86,8 +86,8 @@
 									}
 									?>
 									<div class="form-group text-center">
-										<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-										<label for="remember"> Remember Me</label>
+										<!-- <input type="checkbox" tabindex="3" class="" name="remember" id="remember"> -->
+										<!-- <label for="remember"> Remember Me</label> -->
 									</div>
 									<div class="form-group">
 										<div class="row">
@@ -100,7 +100,7 @@
 										<div class="row">
 											<div class="col-lg-12">
 												<div class="text-center">
-													<a href="https://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
+													<!-- <a href="https://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a> -->
 												</div>
 											</div>
 										</div>
