@@ -47,3 +47,10 @@
     display:block;
     }
 }
+
+#thongtin {
+    text-align: end !important;
+}
+#thongtin div {
+    margin: 10px !important;
+}

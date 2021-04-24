@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="font-awesome/css/all.css">
 </head>
 
-<body>
+<body style="background-color: #F0F0F0;">
   <!-- Menu -->
   <?php
   include './connect_db.php';
@@ -20,23 +20,60 @@
   if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = array();
   }
-
-  if(isset($_GET["action"])) {
+  $error = false;
+  if (isset($_GET["action"])) {
+    function update_cart($add = false)
+    {
+      foreach ($_POST['quanlity'] as $id => $quanlity) {  
+        if ($quanlity == 0) {
+          unset($_SESSION['cart'][$id]);
+        } else {
+          if ($add) {
+            if(!empty($_SESSION['cart'][$id])) {
+              $_SESSION['cart'][$id] += $quanlity;
+            } else {
+              $_SESSION['cart'][$id] = $quanlity;
+            }
+          } else {
+            $_SESSION['cart'][$id] = $quanlity;
+          }
+        }
+      }
+    }
     switch ($_GET["action"]) {
       case "add":
         // quanlity[chi so id sp] as $id co nghia la so $id la chi so mang
-        foreach($_POST['quanlity'] as $id => $quanlity) {
-          $_SESSION['cart'][$id] = $quanlity; 
+        update_cart(true);
+        // var_dump($_SESSION['cart']);
+        // exit;
+        break;
+      case "delete":
+        if (isset($_GET['id'])) {
+          unset($_SESSION['cart'][$_GET['id']]);
         }
-        var_dump($_SESSION['cart']);exit;
+        header('location: ./giohang.php');
+        break;
+      case "submit":
+        if (isset($_POST['capnhat'])) {
+          update_cart();
+          header('location: ./giohang.php');
+        } elseif (isset($_POST['oder_click'])) {
+            if(empty($_POST['name'])) {
+              $error = "Bạn chưa nhập tên của người nhận";
+            } elseif(empty($_POST['phone']))  {
+              $error = "Bạn chưa nhập số điện thoại người nhận";
+            } elseif($_POST['address']) {
+              $error = "Bạn chưa nhập địa chỉ người nhận";
+            }
+        }
         break;
     }
   }
-  if(!empty($_SESSION["cart"])) {
+  if (!empty($_SESSION["cart"])) {
+    $product = mysqli_query($con, "SELECT * FROM products WHERE id_product IN (" . implode(",", array_keys($_SESSION["cart"])) . ")");
+  } ?>
+    
 
-  }
-
-  ?>
   <div class="menu">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
@@ -68,8 +105,8 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <form class="d-flex" action="Main.php">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="text">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
         </div>
@@ -95,6 +132,7 @@
   <!-- End menu -->
   <!-- Product shopping -->
   <div class="container">
+
     <form id="cart-form" action="giohang.php?action=submit" method="POST">
       <table id="cart" class="table table-hover table-condensed">
         <thead>
@@ -107,30 +145,35 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td data-th="Product">
-              <div class="row">
-                <div class="col-sm-2 hidden-xs"><img src="https://via.placeholder.com/100x150" alt="Sản phẩm 1" class="img-responsive" width="100">
+          <?php
+          if(!empty($product)){
+          while ($rows = mysqli_fetch_array($product)) {
+          ?>
+            <tr>
+              <td data-th="Product">
+                <div class="row">
+                  <div class="col-sm-2 hidden-xs"><img src="./image/<?= $rows['image'] ?>" alt="Sản phẩm 1" class="img-responsive" width="100">
+                  </div>
+                  <div class="col-sm-10">
+                    <h4 class="nomargin"><?= $rows['name_product'] ?></h4>
+                    <p><?= $rows['describe_product'] ?></p>
+                  </div>
                 </div>
-                <div class="col-sm-10">
-                  <h4 class="nomargin">Sản phẩm 1</h4>
-                  <p>Mô tả của sản phẩm 1</p>
-                </div>
-              </div>
-            </td>
-            <td data-th="Price">200.000 đ</td>
-            <!-- Chính giữa quanlity là id sản phẩm -->
-            <td data-th="Quantity"><input class="form-control text-center" value="" name="quanlity[]" type="number">
-            </td>
-            <td data-th="Subtotal" class="text-center">200.000 đ</td>
-            <td class="actions" data-th="">
-              <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
-              </button>
-              <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-          <tr>
+              </td>
+              <td data-th="Price"><?= $rows['price'] ?></td>
+              <!-- Chính giữa quanlity là id sản phẩm -->
+              <td data-th="Quantity"><input class="form-control text-center" value="<?= $_SESSION['cart'] [$rows['id_product']] ?>" name="quanlity[<?= $rows['id_product'] ?>]" type="number"></td>
+              <td data-th="Subtotal" class="text-center"><?= $rows['price'] ?></td>
+              <td class="actions" data-th="">
+                <!-- <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
+                </button> -->
+                <a class="btn btn-danger btn-sm" href="giohang.php?action=delete&id=<?= $rows['id_product'] ?>"><i class="fa fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+          <?php } }?>
+
+          <!-- <tr>
             <td data-th="Product">
               <div class="row">
                 <div class="col-sm-2 hidden-xs"><img src="https://via.placeholder.com/100x150" alt="Sản phẩm 1" class="img-responsive" width="100">
@@ -151,35 +194,69 @@
               <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
               </button>
             </td>
-          </tr>
+          </tr> -->
         </tbody>
         <tfoot>
-          <tr class="visible-xs">
+          <!-- <tr class="visible-xs">
             <td class="text-center"><strong>Tổng 200.000 đ</strong>
             </td>
-          </tr>
+          </tr> -->
           <tr>
             <td><a href="Main.php" class="btn btn-success"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
             </td>
             <td colspan="2" class="hidden-xs"> </td>
-            <td class="hidden-xs text-center"><strong>Tổng tiền 500.000 đ</strong>
-            </td>
-            <td><a href="" class="btn btn-dark btn-block">Thanh toán <i class="fa fa-angle-right"></i></a>
-            </td>
+            <td class="hidden-xs text-center"><strong>Tổng tiền 500.000 đ</strong></td>
+            <td><input type="submit" name="capnhat" value="Cập nhật"></td>
           </tr>
         </tfoot>
       </table>
-      <div>
+      <div id="thongtin" style="text-align: end;">
         <hr>
-        <div><label>Người nhận: </label> <input type="name"></div>
-        <div><label>Điện thoại: </label> <input type="phone"></div>
-        <div><label>Địa chỉ: </label> <input type="address"></div>
-        <div><label>Ghi chú: </label> <textarea name="note" id="" cols="50" rows="7"></textarea></div>
-        <input type="submit" name="oder_click" value="Đặt hàng">
+        <div style="margin: 20px;"><label>Người nhận: </label> <input type="name" size="48"></div>
+        <div style="margin: 20px;"><label>Điện thoại: </label> <input type="phone" size="48"></div>
+        <div style="margin: 20px;"><label>Địa chỉ: </label> <input type="address" size="48"></div>
+        <div style="margin: 20px;"><label>Ghi chú: </label> <textarea name="note" id="" cols="100" rows="7"></textarea></div>
+        <input class="btn btn-dark btn-block" type="submit" name="oder_click" value="Đặt hàng" style="margin: 10px;">
+        <!-- <a href="" class="btn btn-dark btn-block">Thanh toán <i class="fa fa-angle-right"></i></a> -->
       </div>
     </form>
   </div>
   <!-- End product shopping -->
+  <!-- Footer -->
+  <footer class="bg-dark text-center text-white">
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+      <!-- Section: Social media -->
+      <section class="mb-4">
+        <!-- Facebook -->
+        <a class="btn btn-outline-light btn-floating m-1" href="https://www.facebook.com/" role="button"><i class="fab fa-facebook-f"></i></a>
+
+        <!-- Twitter -->
+        <a class="btn btn-outline-light btn-floating m-1" href="https://twitter.com/twister" role="button"><i class="fab fa-twitter"></i></a>
+
+        <!-- Google -->
+        <a class="btn btn-outline-light btn-floating m-1" href="https://www.google.com/" role="button"><i class="fab fa-google"></i></a>
+
+        <!-- Instagram -->
+        <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/" role="button"><i class="fab fa-instagram"></i></a>
+
+        <!-- Linkedin -->
+        <a class="btn btn-outline-light btn-floating m-1" href="https://au.linkedin.com/" role="button"><i class="fab fa-linkedin-in"></i></a>
+
+        <!-- Github -->
+        <a class="btn btn-outline-light btn-floating m-1" href="https://github.com/" role="button"><i class="fab fa-github"></i></a>
+      </section>
+      <!-- Section: Social media -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2020 Copyright:
+      <a class="text-white" href="https://www.facebook.com/profile.php?id=100008172966669">BOOKSTORE</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
   <script src="js/bootstrap.js"></script>
 </body>
 

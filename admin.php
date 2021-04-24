@@ -12,7 +12,7 @@
 
 </head>
 
-<body>
+<body style="background-color: #F0F0F0;">
   <div class="menu">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
