@@ -16,17 +16,7 @@
   <!-- Menu -->
   <?php
   include './connect_db.php';
-  if(empty($_SESSION['user'])) {
-    echo 'Bạn chưa đăng nhập để sử dụng tính năng này. <a href="javascript:history.back()">Quay lại</a> ';
-    exit;
-  } else {
-    $user = $_SESSION['user'];
-    $search = mysqli_query($con,"SELECT * FROM `user` WHERE `username` LIKE '".$user."'");
-    if(mysqli_num_rows($search) == 1) {
-      $result = mysqli_fetch_array($search);
-      $iduser = $result['id'];
-    }
-  }
+  include './hienidnguoidung.php';
   if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = array();
   }
@@ -122,14 +112,14 @@
   <div class="menu">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="Main.php"><img src="image/logo.png" alt="..." width="100px"></a>
+        <a class="navbar-brand" href="index.php"><img src="image/logo.png" alt="..." width="100px"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="Main.php">Trang chủ</a>
+              <a class="nav-link active" aria-current="page" href="index.php">Trang chủ</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Thể Loại</a>
@@ -150,7 +140,7 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex" action="Main.php">
+          <form class="d-flex" action="index.php">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="text">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
@@ -227,7 +217,7 @@
             </td>
           </tr> -->
           <tr>
-            <td><a href="Main.php" class="btn btn-success"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
+            <td><a href="index.php" class="btn btn-success"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
             </td>
             <td colspan="2" class="hidden-xs"> </td>
             <td class="hidden-xs text-center"><strong>Tổng tiền <?= $total ?> VNĐ</strong></td>

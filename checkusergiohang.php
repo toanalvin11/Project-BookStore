@@ -5,7 +5,7 @@
     if(!empty($_SESSION['user'])) {
         header('location:giohang.php');
     } else {
-        header('location:Main.php');
+        header('location:index.php');
         die();
     }
 ?>
