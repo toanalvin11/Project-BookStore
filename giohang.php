@@ -20,16 +20,15 @@
   if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = array();
   }
-  $error = false;
   if (isset($_GET["action"])) {
     function update_cart($add = false)
     {
-      foreach ($_POST['quanlity'] as $id => $quanlity) {  
+      foreach ($_POST['quanlity'] as $id => $quanlity) {
         if ($quanlity == 0) {
           unset($_SESSION['cart'][$id]);
         } else {
           if ($add) {
-            if(!empty($_SESSION['cart'][$id])) {
+            if (!empty($_SESSION['cart'][$id])) {
               $_SESSION['cart'][$id] += $quanlity;
             } else {
               $_SESSION['cart'][$id] = $quanlity;
@@ -58,21 +57,52 @@
           update_cart();
           header('location: ./giohang.php');
         } elseif (isset($_POST['oder_click'])) {
-            if(empty($_POST['name'])) {
-              $error = "Bạn chưa nhập tên của người nhận";
-            } elseif(empty($_POST['phone']))  {
-              $error = "Bạn chưa nhập số điện thoại người nhận";
-            } elseif($_POST['address']) {
-              $error = "Bạn chưa nhập địa chỉ người nhận";
+          $error = false;
+          if (empty($_POST['namenn'])) {
+            $error = "Bạn chưa nhập tên của người nhận";
+          } elseif (empty($_POST['phonenn'])) {
+            $error = "Bạn chưa nhập số điện thoại người nhận";
+          } elseif (empty($_POST['addressnn'])) {
+            $error = "Bạn chưa nhập địa chỉ người nhận";
+          } elseif (empty($_POST['quanlity'])) {
+            $error = "Giỏ hàng của bạn hiện đang rỗng";
+          }
+          // xu ly du lieu lên database
+          if ($error == false && !empty($_POST['quanlity'])) {
+            $product = mysqli_query($con, "SELECT * FROM `products` WHERE `id_product` IN (" . implode(",", array_keys($_POST['quanlity'])) . ")");
+            $total = 0;
+            $orderProducts = array();
+            while ($rows = mysqli_fetch_array($product)) {
+              $orderProducts[] = $rows;
+              $total += $rows['price'] * $_POST['quanlity'][$rows['id_product']];
             }
+            // tao du lieu cho bang order
+            $insertOrder = mysqli_query($con, "INSERT INTO `order` (`id`, `name`, `phone`, `address`, `notes`, `total`, `status`) VALUES (NULL, '" . $_POST['namenn'] . "', '" . $_POST['phonenn'] . "', '" . $_POST['addressnn'] . "', '" . $_POST['notenn'] . "', '" . $total . "', '0')");
+            // hàm insert_id là hàm lấy lại id của câu query phía trên
+            $idorder = $con->insert_id;
+            $insertString = "";
+            foreach ($orderProducts as $keys => $product) {
+              $insertString .= "(NULL, '" . $idorder . "', '" . $product['id_product'] . "', '" . $_POST['quanlity'][$product['id_product']] . "', '" . $product['price'] . "')";
+              // $keys này tự động tăng theo lệnh foreach 0,1,2... 
+              if ($keys != count($orderProducts) - 1) {
+                $insertString .= ",";
+              }
+            }
+            // tao du lieu cho bang order_detail
+            $insertOrder = mysqli_query($con, "INSERT INTO `order_detail` (`id`, `oder_id`, `product_id`, `quanlity`, `price`) VALUES " . $insertString . "");
+            unset($_SESSION['cart']);
+            echo "<script type='text/javascript'>alert('Bạn đã đạt hàng thành công');</script>";
+          }
         }
         break;
     }
   }
   if (!empty($_SESSION["cart"])) {
     $product = mysqli_query($con, "SELECT * FROM products WHERE id_product IN (" . implode(",", array_keys($_SESSION["cart"])) . ")");
+  } else {
+    $product = false;
   } ?>
-    
+
 
   <div class="menu">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -133,7 +163,7 @@
   <!-- Product shopping -->
   <div class="container">
 
-    <form id="cart-form" action="giohang.php?action=submit" method="POST">
+    <form id="cart-form" action="?action=submit" method="POST">
       <table id="cart" class="table table-hover table-condensed">
         <thead>
           <tr>
@@ -146,34 +176,52 @@
         </thead>
         <tbody>
           <?php
-          if(!empty($product)){
-          while ($rows = mysqli_fetch_array($product)) {
+          if (!empty($product)) {
+            $total = 0;
+            while ($rows = mysqli_fetch_array($product)) {
           ?>
-            <tr>
-              <td data-th="Product">
-                <div class="row">
-                  <div class="col-sm-2 hidden-xs"><img src="./image/<?= $rows['image'] ?>" alt="Sản phẩm 1" class="img-responsive" width="100">
+              <tr>
+                <td data-th="Product">
+                  <div class="row">
+                    <div class="col-sm-2 hidden-xs"><img src="./image/<?= $rows['image'] ?>" alt="Sản phẩm 1" class="img-responsive" width="100">
+                    </div>
+                    <div class="col-sm-10">
+                      <h4 class="nomargin"><?= $rows['name_product'] ?></h4>
+                      <p><?= $rows['describe_product'] ?></p>
+                    </div>
                   </div>
-                  <div class="col-sm-10">
-                    <h4 class="nomargin"><?= $rows['name_product'] ?></h4>
-                    <p><?= $rows['describe_product'] ?></p>
-                  </div>
-                </div>
-              </td>
-              <td data-th="Price"><?= $rows['price'] ?></td>
-              <!-- Chính giữa quanlity là id sản phẩm -->
-              <td data-th="Quantity"><input class="form-control text-center" value="<?= $_SESSION['cart'] [$rows['id_product']] ?>" name="quanlity[<?= $rows['id_product'] ?>]" type="number"></td>
-              <td data-th="Subtotal" class="text-center"><?= $rows['price'] ?></td>
-              <td class="actions" data-th="">
-                <!-- <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
+                </td>
+                <td data-th="Price"><?= $rows['price'] ?> VNĐ</td>
+                <!-- Chính giữa quanlity là id sản phẩm -->
+                <td data-th="Quantity"><input class="form-control text-center" value="<?= $_SESSION['cart'][$rows['id_product']]?>" name="quanlity[<?= $rows['id_product'] ?>]" type="number"></td>
+                <td data-th="Subtotal" class="text-center"><?= $rows['price'] * $_SESSION['cart'][$rows['id_product']] ?> VNĐ</td>
+                <td class="actions" data-th="">
+                  <!-- <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
                 </button> -->
-                <a class="btn btn-danger btn-sm" href="giohang.php?action=delete&id=<?= $rows['id_product'] ?>"><i class="fa fa-trash"></i>
-                </a>
-              </td>
-            </tr>
-          <?php } }?>
+                  <a class="btn btn-danger btn-sm" href="giohang.php?action=delete&id=<?= $rows['id_product'] ?>"><i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            <?php
+              $total += $rows['price'] * $_SESSION['cart'][$rows['id_product']];
+            } ?>
+        </tbody>
+        <tfoot>
+          <!-- <tr class="visible-xs">
+            <td class="text-center"><strong>Tổng 200.000 đ</strong>
+            </td>
+          </tr> -->
+          <tr>
+            <td><a href="Main.php" class="btn btn-success"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
+            </td>
+            <td colspan="2" class="hidden-xs"> </td>
+            <td class="hidden-xs text-center"><strong>Tổng tiền <?= $total ?> VNĐ</strong></td>
+            <td><input type="submit" name="capnhat" value="Cập nhật"></td>
+          </tr>
+        </tfoot>
+      <?php }?>
 
-          <!-- <tr>
+      <!-- <tr>
             <td data-th="Product">
               <div class="row">
                 <div class="col-sm-2 hidden-xs"><img src="https://via.placeholder.com/100x150" alt="Sản phẩm 1" class="img-responsive" width="100">
@@ -195,27 +243,16 @@
               </button>
             </td>
           </tr> -->
-        </tbody>
-        <tfoot>
-          <!-- <tr class="visible-xs">
-            <td class="text-center"><strong>Tổng 200.000 đ</strong>
-            </td>
-          </tr> -->
-          <tr>
-            <td><a href="Main.php" class="btn btn-success"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
-            </td>
-            <td colspan="2" class="hidden-xs"> </td>
-            <td class="hidden-xs text-center"><strong>Tổng tiền 500.000 đ</strong></td>
-            <td><input type="submit" name="capnhat" value="Cập nhật"></td>
-          </tr>
-        </tfoot>
       </table>
       <div id="thongtin" style="text-align: end;">
         <hr>
-        <div style="margin: 20px;"><label>Người nhận: </label> <input type="name" size="48"></div>
-        <div style="margin: 20px;"><label>Điện thoại: </label> <input type="phone" size="48"></div>
-        <div style="margin: 20px;"><label>Địa chỉ: </label> <input type="address" size="48"></div>
-        <div style="margin: 20px;"><label>Ghi chú: </label> <textarea name="note" id="" cols="100" rows="7"></textarea></div>
+        <?php if (!empty($error)) {?>
+        <p id="thongbaoloi" style="color: red;margin-right: 20px;">*<?= $error?></p>
+        <?php }?>
+        <div style="margin: 20px;"><label>*Người nhận: </label> <input type="text" name="namenn" size="48"></div>
+        <div style="margin: 20px;"><label>*Điện thoại: </label> <input type="text" name="phonenn" size="48"></div>
+        <div style="margin: 20px;"><label>*Địa chỉ: </label> <input type="text" name="addressnn" size="48"></div>
+        <div style="margin: 20px;"><label>Ghi chú: </label> <textarea name="notenn" cols="100" rows="7"></textarea></div>
         <input class="btn btn-dark btn-block" type="submit" name="oder_click" value="Đặt hàng" style="margin: 10px;">
         <!-- <a href="" class="btn btn-dark btn-block">Thanh toán <i class="fa fa-angle-right"></i></a> -->
       </div>
