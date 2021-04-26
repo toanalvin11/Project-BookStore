@@ -16,7 +16,17 @@
   <!-- Menu -->
   <?php
   include './connect_db.php';
-
+  if(empty($_SESSION['user'])) {
+    echo 'Bạn chưa đăng nhập để sử dụng tính năng này. <a href="javascript:history.back()">Quay lại</a> ';
+    exit;
+  } else {
+    $user = $_SESSION['user'];
+    $search = mysqli_query($con,"SELECT * FROM `user` WHERE `username` LIKE '".$user."'");
+    if(mysqli_num_rows($search) == 1) {
+      $result = mysqli_fetch_array($search);
+      $iduser = $result['id'];
+    }
+  }
   if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = array();
   }
@@ -77,7 +87,8 @@
               $total += $rows['price'] * $_POST['quanlity'][$rows['id_product']];
             }
             // tao du lieu cho bang order
-            $insertOrder = mysqli_query($con, "INSERT INTO `order` (`id`, `name`, `phone`, `address`, `notes`, `total`, `status`) VALUES (NULL, '" . $_POST['namenn'] . "', '" . $_POST['phonenn'] . "', '" . $_POST['addressnn'] . "', '" . $_POST['notenn'] . "', '" . $total . "', '0')");
+            
+            $insertOrder = mysqli_query($con, "INSERT INTO `order` (`id`, `iduser`, `name`, `phone`, `address`, `notes`, `total`, `status`) VALUES (NULL,'" . $iduser . "', '" . $_POST['namenn'] . "', '" . $_POST['phonenn'] . "', '" . $_POST['addressnn'] . "', '" . $_POST['notenn'] . "', '" . $total . "', '0')");
             // hàm insert_id là hàm lấy lại id của câu query phía trên
             $idorder = $con->insert_id;
             $insertString = "";
@@ -90,8 +101,12 @@
             }
             // tao du lieu cho bang order_detail
             $insertOrder = mysqli_query($con, "INSERT INTO `order_detail` (`id`, `oder_id`, `product_id`, `quanlity`, `price`) VALUES " . $insertString . "");
-            unset($_SESSION['cart']);
-            echo "<script type='text/javascript'>alert('Bạn đã đạt hàng thành công');</script>";
+            if($insertOrder) {  
+              unset($_SESSION['cart']);
+              echo "<script type='text/javascript'>alert('Bạn đã đạt hàng thành công');</script>";
+            } else {
+              echo "<script type='text/javascript'>alert('Thanh toán thất bại');</script>";
+            }
           }
         }
         break;
@@ -193,7 +208,7 @@
                 </td>
                 <td data-th="Price"><?= $rows['price'] ?> VNĐ</td>
                 <!-- Chính giữa quanlity là id sản phẩm -->
-                <td data-th="Quantity"><input class="form-control text-center" value="<?= $_SESSION['cart'][$rows['id_product']]?>" name="quanlity[<?= $rows['id_product'] ?>]" type="number"></td>
+                <td data-th="Quantity"><input class="form-control text-center" value="<?= $_SESSION['cart'][$rows['id_product']] ?>" name="quanlity[<?= $rows['id_product'] ?>]" type="number"></td>
                 <td data-th="Subtotal" class="text-center"><?= $rows['price'] * $_SESSION['cart'][$rows['id_product']] ?> VNĐ</td>
                 <td class="actions" data-th="">
                   <!-- <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
@@ -219,7 +234,7 @@
             <td><input type="submit" name="capnhat" value="Cập nhật"></td>
           </tr>
         </tfoot>
-      <?php }?>
+      <?php } ?>
 
       <!-- <tr>
             <td data-th="Product">
@@ -246,9 +261,9 @@
       </table>
       <div id="thongtin" style="text-align: end;">
         <hr>
-        <?php if (!empty($error)) {?>
-        <p id="thongbaoloi" style="color: red;margin-right: 20px;">*<?= $error?></p>
-        <?php }?>
+        <?php if (!empty($error)) { ?>
+          <p id="thongbaoloi" style="color: red;margin-right: 20px;">*<?= $error ?></p>
+        <?php } ?>
         <div style="margin: 20px;"><label>*Người nhận: </label> <input type="text" name="namenn" size="48"></div>
         <div style="margin: 20px;"><label>*Điện thoại: </label> <input type="text" name="phonenn" size="48"></div>
         <div style="margin: 20px;"><label>*Địa chỉ: </label> <input type="text" name="addressnn" size="48"></div>
