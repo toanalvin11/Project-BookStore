@@ -2147,8 +2147,9 @@ progress {
 }
 
 .form-control {
-  display: block;
-  width: 100%;
+  margin-left: 24.5%;
+  display: inline-table;
+  width: 25%;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;
