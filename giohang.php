@@ -122,7 +122,6 @@
               <a class="nav-link active" aria-current="page" href="index.php">Trang chủ</a>
             </li>
             <?php
-            include 'connect_db.php';
             if (isset($_SESSION['user'])) {
               $user = $_SESSION['user'];
               $query = mysqli_query($con, "SELECT * FROM user WHERE username = '$user'");

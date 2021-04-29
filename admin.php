@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,14 +12,17 @@
   <link rel="stylesheet" href="font-awesome/css/all.css">
 
 </head>
-<?php include './hienidnguoidung.php'; ?>
+
 <body style="background-color: #F0F0F0;">
+  <?php
+  include './connect_db.php';
+  include './hienidnguoidung.php';
+  ?>
   <div class="menu">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand" href="#"><img src="image/logo.png" alt="..." width="100px"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -43,8 +47,7 @@
             </li>
             <li class="nav-item text-nowrap">
               <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
-              <a type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light"
-                href="./dangxuat.php">Đăng Xuất</a>
+              <a type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light" href="./dangxuat.php">Đăng Xuất</a>
             </li>
           </ul>
         </div>
@@ -74,8 +77,7 @@
             <p style="margin-top: 4%;"><strong>Tên Sản Phẩm :</strong></p>
             <input value="Tên Sản Phẩm" type="text" id="inputPrefilledEx" class="form-control" style="margin-top: -6%;">
             <o style="margin-left: 5%;"> <strong>Thể Loại : </strong></o>
-            <select class="form-select form-select-sm" aria-label=".form-select-sm example"
-              style="margin-left:7%;margin-top: 2%;">
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="margin-left:7%;margin-top: 2%;">
               <option selected>Thể loại</option>
               <option value="1">One</option>
               <option value="2">Two</option>
@@ -89,8 +91,7 @@
               <label class="input-group-text" for="inputGroupFile02">Upload</label>
             </div>
             </p>
-            <button type="button" class="btn btn-primary btn-lg"
-              style="text-align: center;margin-left: 50%;width: 10%;font-weight: 200;font-size: 1rem;">Thêm</button>
+            <button type="button" class="btn btn-primary btn-lg" style="text-align: center;margin-left: 50%;width: 10%;font-weight: 200;font-size: 1rem;">Thêm</button>
           </div>
         </form>
 
@@ -103,8 +104,7 @@
             <p style="margin-top: 4%;"><strong>Tên Sản Phẩm :</strong></p>
             <input value="Tên Sản Phẩm" type="text" id="inputPrefilledEx" class="form-control" style="margin-top: -6%;">
             <o style="margin-left: 5%;"> <strong>Thể Loại : </strong></o>
-            <select class="form-select form-select-sm" aria-label=".form-select-sm example"
-              style="margin-left:7%;margin-top: 2%;">
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="margin-left:7%;margin-top: 2%;">
               <option selected>Thể loại</option>
               <option value="1">One</option>
               <option value="2">Two</option>
@@ -118,15 +118,13 @@
               <label class="input-group-text" for="inputGroupFile02">Upload</label>
             </div>
             </p>
-            <button type="button" class="btn btn-primary btn-lg"
-              style="text-align: center;margin-left: 50%;width: 10%;font-weight: 200;font-size: 1rem;">Thêm
+            <button type="button" class="btn btn-primary btn-lg" style="text-align: center;margin-left: 50%;width: 10%;font-weight: 200;font-size: 1rem;">Thêm
             </button>
           </div>
         </form>
 
         <form>
-          <table class="table table-striped" id="xoasanpham"
-            style="margin-top:-19%;overflow: scroll;display: none;width: 70%">
+          <table class="table table-striped" id="xoasanpham" style="margin-top:-19%;overflow: scroll;display: none;width: 70%">
             <thead>
               <tr>
                 <th scope="col" style="width: 20%;"> ID Sản Phẩm</th>
@@ -237,8 +235,7 @@
         </form>
 
         <form>
-          <table class="table table-striped" id="cacsanpham"
-            style="margin-top:-19%;overflow: scroll;display: none;margin-left: 30%;width: 70%;">
+          <table class="table table-striped" id="cacsanpham" style="margin-top:-19%;overflow: scroll;display: none;margin-left: 30%;width: 70%;">
             <thead>
               <tr>
                 <th scope="col" style="width: 15%"> ID Sản Phẩm</th>

@@ -14,7 +14,10 @@
 
 <body>
     <!-- Header -->
-    <?php include './hienidnguoidung.php'; ?>
+    <?php
+    include './connect_db.php';
+    include './hienidnguoidung.php';
+    ?>
     <div class="menu">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
@@ -28,7 +31,6 @@
                             <a class="nav-link active" aria-current="page" href="index.php">Trang chủ</a>
                         </li>
                         <?php
-                        include 'connect_db.php';
                         if (isset($_SESSION['user'])) {
                             $user = $_SESSION['user'];
                             $query = mysqli_query($con, "SELECT * FROM user WHERE username = '$user'");
@@ -97,6 +99,9 @@
     </div>
     <!-- End header -->
     <!-- Hien don hang khach hang  -->
+    <?php
+    $sqlquery = mysqli_query($con, "SELECT * FROM order");
+    ?>
     <div class="container listdonhang" id="listdonhang">
         <table class="table">
             <thead>
@@ -111,15 +116,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Chaien</td>
-                    <td>Otto</td>
-                    <td>@short</td>
-                    <td>Otto</td>
-                    <td>Otto</td>
-                    <td>Otto</td>
-                </tr>
+                <?php while ($rows = mysqli_fetch_array($sqlquery)) { ?>
+                    <tr>
+                        <th scope="row"><?= $rows['id']?></th>
+                        <td><?= $rows['name']?></td>
+                        <td><?= $rows['phone']?></td>
+                        <td><?= $rows['address']?></td>
+                        <td><?= $rows['notes']?></td>
+                        <td><?= $rows['total']?></td>
+                        <td><?= $rows['status']?></td>
+                    </tr>
+                <?php } ?>
                 <tr>
                     <th scope="row">2</th>
                     <td>Chaien</td>

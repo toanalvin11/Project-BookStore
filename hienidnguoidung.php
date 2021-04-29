@@ -1,5 +1,4 @@
 <?php
-include './connect_db.php';
 if (empty($_SESSION['user'])) {
     echo 'Bạn chưa đăng nhập để sử dụng tính năng này. <a href="javascript:history.back()">Quay lại</a> ';
     exit;
