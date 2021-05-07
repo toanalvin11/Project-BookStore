@@ -70,7 +70,7 @@
 											if (mysqli_num_rows($querysql) > 0) {
 												$result = mysqli_fetch_assoc($querysql);
 												// 0 là admin 1 là tài khoản bình thường 2 là tài khoản đang bị vô hiệu hóa
-												if ($result['status'] != 2) {
+												if ($result['status'] != 0) {
 													$_SESSION["user"] = $username;
 													mysqli_close($con);
 													header('location:index.php');
