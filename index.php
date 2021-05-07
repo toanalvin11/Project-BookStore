@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Store</title>
-  <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
   <link rel="stylesheet" href="font-awesome/css/all.css">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
-<body>
+<body style="background-color: #F0F0F0;">
 
   <!-- Open menu -->
   <div class="menu">
@@ -24,7 +24,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="Main.php">Trang chủ</a>
+              <a class="nav-link active" aria-current="page" href="index.php">Trang chủ</a>
             </li>
             <?php
             include 'connect_db.php';
@@ -75,7 +75,7 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> <?= $_SESSION['user']; ?></a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Thông Tin</a></li>
+                <li><a class="dropdown-item" href="./donhangcuakhach.php">Thông tin đơn hàng</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
@@ -96,10 +96,9 @@
     </nav>
   </div>
   <!-- End menu -->
-  <!-- Dang Nhap & Dang Ky -->
-  <!-- Dong Dang Ky & Dang Ky -->
+
   <!-- Open content -->
-  <!-- <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -107,13 +106,13 @@
         </div>
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <img src="https://via.placeholder.com/1920x530" class="d-block w-100" alt="...">
+            <img src="./image/Banner-sách-mới-tháng-6.2018-02.jpg" class="d-block w-100" alt="...">
           </div>
           <div class="carousel-item">
-            <img src="https://via.placeholder.com/1920x530" class="d-block w-100" alt="...">
+            <img src="./image/9fb7edf5a0395c3ad377051d210f7d1a75f5a8571.jpg" class="d-block w-100" alt="...">
           </div>
           <div class="carousel-item">
-            <img src="https://via.placeholder.com/1920x530" class="d-block w-100" alt="...">
+            <img src="./image/banner-sach.jpg" class="d-block w-100" alt="...">
           </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"  data-bs-slide="prev">
@@ -124,7 +123,7 @@
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
-    </div> -->
+    </div>
   <!-- End contend -->
   <!-- Product -->
   <div class="container">

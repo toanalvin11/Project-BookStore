@@ -1,5 +1,5 @@
 <?php
-  include '../connect_db.php';
+include '../connect_db.php';
 ?>
 
 <!DOCTYPE html>
@@ -54,80 +54,80 @@
     </nav>
   </div>
 
-<?php
+  <?php
   include '../connect_db.php';
   $id = $_GET['id'];
   $sql_up = "SELECT * FROM products where id_product = $id";
-  $query_up = mysqli_query($con,$sql_up);
+  $query_up = mysqli_query($con, $sql_up);
   $row_up = mysqli_fetch_assoc($query_up);
-  if(isset($_POST['sbm'])){
-      $id_product = $_POST['id_product'];
-      $name_product = $_POST['name_product'];
-      $price = $_POST['price'];
-      
-      if($_FILES['image']['name']==''){
-        $image = $row_up['image'];
-      }else{
-        $image = $_FILES['image']['name'];
-        $image_tmp = $_FILES['image']['tmp_name'];
-        move_uploaded_file($image_tmp, '../image/'.$image);
-        $sql = "UPDATE products SET img = '$image' where id = $id ";
-        mysqli_query($con,$sql);
-       }
-      $describe_product = $_POST['describe_product'];
-      $id_category = $_POST['id_category'];
+  if (isset($_POST['sbm'])) {
+    $id_product = $_POST['id_product'];
+    $name_product = $_POST['name_product'];
+    $price = $_POST['price'];
 
-  $sql = "UPDATE products SET id_product = '".$id_product."', name_product = '".$name_product."', price = '".$price."', image = '".$image."', describe_product = '".$describe_product."', id_category = '".$id_category."' WHERE id_product = $id  ";
-  $query = mysqli_query($con,$sql);
-  header('location: ../admin.php');
+    if ($_FILES['image']['name'] == '') {
+      $image = $row_up['image'];
+    } else {
+      $image = $_FILES['image']['name'];
+      $image_tmp = $_FILES['image']['tmp_name'];
+      move_uploaded_file($image_tmp, '../image/' . $image);
+      $sql = "UPDATE products SET img = '$image' where id = $id ";
+      mysqli_query($con, $sql);
     }
-?>
+    $describe_product = $_POST['describe_product'];
+    $id_category = $_POST['id_category'];
 
-<div class="container" id="addproduct">
-        <div class="card">
-        <div class="card-header">
-            <h2 onclick="addproduct();">Sửa sản phẩm</h2>
-        </div>
-    <div class="card-body">
-        <form method="POST" enctype="multipart/form-data" >
-            <div class="form-group">
-                <label for="">ID sản phẩm</label>
-                <input type="text" name="id_product" class="form-control" required value="<?php echo $row_up['id_product']; ?>">
-            </div>
-            <div class="form-group">
-                <label for="">Tên sản phẩm</label>
-                <input type="text" name="name_product" class="form-control" required value="<?php echo $row_up['name_product']; ?>">
-            </div>
-            <div class="form-group">
-                <label for="">Giá sản phẩm</label>
-                <input type="number" name="price" class="form-control" required value="<?php echo $row_up['price']; ?>">
-            </div>
-            <div class="form-group">
-                <label for="">Hình ảnh sản phẩm</label> <br>
-                <input type="file" name="image" value="<?php echo $row_up['image']; ?>">
-            </div>
-            <div class="form-group">
-                <label for="">Mô tả sản phẩm</label> <br>
-                <input type="text" name="describe_product" class="form-control" value="<?php echo $row_up['describe_product']; ?>">
-            </div>
-            <div class="form-group" style="width: 25%;">
-              <label for="">Thể loại:</label>
+    $sql = "UPDATE products SET id_product = '" . $id_product . "', name_product = '" . $name_product . "', price = '" . $price . "', image = '" . $image . "', describe_product = '" . $describe_product . "', id_category = '" . $id_category . "' WHERE id_product = $id  ";
+    $query = mysqli_query($con, $sql);
+    header('location: ../admin.php');
+  }
+  ?>
+
+  <div class="container" id="addproduct">
+    <div class="card">
+      <div class="card-header">
+        <h2 onclick="addproduct();">Sửa sản phẩm</h2>
+      </div>
+      <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="">ID sản phẩm</label>
+            <input type="text" name="id_product" class="form-control" required value="<?php echo $row_up['id_product']; ?>">
+          </div>
+          <div class="form-group">
+            <label for="">Tên sản phẩm</label>
+            <input type="text" name="name_product" class="form-control" required value="<?php echo $row_up['name_product']; ?>">
+          </div>
+          <div class="form-group">
+            <label for="">Giá sản phẩm</label>
+            <input type="number" name="price" class="form-control" required value="<?php echo $row_up['price']; ?>">
+          </div>
+          <div class="form-group">
+            <label for="">Hình ảnh sản phẩm</label> <br>
+            <input type="file" name="image" value="<?php echo $row_up['image']; ?>">
+          </div>
+          <div class="form-group">
+            <label for="">Mô tả sản phẩm</label> <br>
+            <input type="text" name="describe_product" class="form-control" value="<?php echo $row_up['describe_product']; ?>">
+          </div>
+          <div class="form-group" style="width: 25%;">
+            <label for="">Thể loại:</label>
+            <?php
+            $sql = "SELECT * FROM category";
+            $query_sql = mysqli_query($con, $sql);
+            ?>
+            <select class="form-control" name="id_category">
               <?php
-              $sql = "SELECT * FROM category";
-              $query_sql = mysqli_query($con, $sql);
+              $sql_category = "SELECT * FROM category ORDER BY id_category DESC";
+              $query_category = mysqli_query($con, $sql_category);
+              while ($rows = mysqli_fetch_array($query_category)) {
               ?>
-              <select class="form-control" name="id_category">
-                <?php
-                $sql_category = "SELECT * FROM category ORDER BY id_category DESC";
-                $query_category = mysqli_query($con, $sql_category);
-                while ($rows = mysqli_fetch_array($query_category)) {
-                ?>
-                  <option value="<?= $rows['id_category'] ?>"><?= $rows['category_name'] ?></option>
-                <?php } ?>
-              </select>
-            </div>
-            <button name="sbm" class="btn btn-primary" type="submit">Sửa sản phẩm</button>
+                <option value="<?= $rows['id_category'] ?>"><?= $rows['category_name'] ?></option>
+              <?php } ?>
+            </select>
+          </div>
+          <button name="sbm" class="btn btn-primary" type="submit">Sửa sản phẩm</button>
         </form>
+      </div>
     </div>
-        </div>
-</div>
+  </div>

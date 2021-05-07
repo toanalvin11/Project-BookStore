@@ -23,7 +23,7 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="Main.php">Trang chủ</a>
+                    <a class="nav-link active" aria-current="page" href="index.php">Trang chủ</a>
                   </li>                      
                 </ul>
               </div>
@@ -73,7 +73,7 @@
 												if ($result['status'] != 2) {
 													$_SESSION["user"] = $username;
 													mysqli_close($con);
-													header('location:Main.php');
+													header('location:index.php');
 												} else {
 													echo "<script type='text/javascript'>alert('Tài khoản của bạn đang bị khóa vui lòng liên hệ vói quản trị viên');</script>";
 												}
@@ -107,7 +107,7 @@
 										<div class="row">
 											<div class="col-lg-3">
 												<div class="text-center">
-													<a href="Main.php" tabindex="5">Trở về trang chủ</a>
+													<a href="index.php" tabindex="5">Trở về trang chủ</a>
 												</div>
 											</div>
 										</div>
@@ -164,7 +164,7 @@
 										<div class="row">
 											<div class="col-lg-3">
 												<div class="text-center">
-													<a href="Main.php" tabindex="5">Trở về trang chủ</a>
+													<a href="index.php" tabindex="5">Trở về trang chủ</a>
 												</div>
 											</div>
 										</div>

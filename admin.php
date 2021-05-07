@@ -1,7 +1,6 @@
-<?php
+<?php session_start();
 include './connect_db.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +25,11 @@ include './connect_db.php';
 
 </head>
 
-<body data-spy="scroll" data-target="#myScrollspy" data-offset="1">
+<body style="background-color: #F0F0F0;" data-spy="scroll" data-target="#myScrollspy" data-offset="1">
+  <?php
+  include './connect_db.php';
+  include './hienidnguoidung.php';
+  ?>
   <div class="menu">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
@@ -37,16 +40,16 @@ include './connect_db.php';
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="Main.php">Trang chủ</a>
+              <a class="nav-link active" aria-current="page" href="index.php">Trang chủ</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#" onclick="listsanpham();">Sản Phẩm</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" onclick="listdonhang()" ;>Đơn Hàng</a>
+              <a class="nav-link" href="./admin/donhang.php" onclick="listdonhang()" ;>Đơn Hàng</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" onclick="listkhachhang();">Khách Hàng</a>
+              <a class="nav-link" href="./admin/quanlyuser.php" onclick="listkhachhang();">Khách Hàng</a>
             </li>
           </ul>
 
@@ -56,7 +59,7 @@ include './connect_db.php';
             </li>
             <li class="nav-item text-nowrap">
               <!-- Nếu chưa đăng nhập thì hiển thị nút Đăng nhập -->
-              <a type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light" href="dangkyvadangnhap.php">Đăng Xuất</a>
+              <a type="button" class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light" href="./dangxuat.php">Đăng Xuất</a>
             </li>
           </ul>
         </div>
@@ -75,255 +78,294 @@ include './connect_db.php';
           </nav>
         </nav>
       </div>
+      <div class="container">
+        <div class="col">
+          <!-- Xử lý thêm sản phẩm -->
 
-      <div class="col">
-        <!-- Xử lý thêm sản phẩm -->
-
-        <?php
-
-
-        if (isset($_POST['sbm'])) {
-          $name_product = $_POST['name_product'];
-          $price = $_POST['price'];
-
-          if (isset($_FILES['image'])) {
-            $file = $_FILES['image'];
-            $file_name = $file['name'];
-            move_uploaded_file($file['tmp_name'], 'image/' . $file_name);
-          }
-
-          $describe_product = $_POST['describe_product'];
-          $id_category = $_POST['id_category'];
-
-          $sql = "INSERT INTO products(name_product,price,image,describe_product,id_category) VALUES ('" . $name_product . "','" . $price . "','" . $file_name . "','" . $describe_product . "','" . $id_category . "')";
-          $query = mysqli_query($con, $sql);
-
-          if ($query) {
-            header('location: ./admin.php');
-          } else {
-            echo "Lỗi";
-          }
-        }
-        ?>
-        <!-- Xử lý thêm sản phẩm -->
-
-        <form method="POST" enctype="multipart/form-data">
-          <div class="container-fluid" id="addproduct" style="display: none;">
-            <div class="card-header">
-              <h2>Thêm sản phẩm</h2>
-            </div>
-            <div class="form-group">
-              <label for="">ID sản phẩm</label>
-              <input type="text" name="id_product" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="">Tên sản phẩm</label>
-              <input type="text" name="name_product" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-              <label for="">Giá sản phẩm</label>
-              <input type="number" min="0" name="price" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="" style="margin-top: 2%;">Hình ảnh sản phẩm</label> <br>
-              <input type="file" name="image" style="margin-top: -1222%;">
-            </div>
-            <div class="form-group">
-              <label for="">Mô tả sản phẩm</label> <br>
-              <input type="text" name="describe_product" class="form-control">
-            </div>
-            <div class="form-group" style="width: 25%;">
-              <label for="">Thể loại:</label>
-              <?php
-              $sql = "SELECT * FROM category";
-              $query_sql = mysqli_query($con, $sql);
-              ?>
-              <select class="form-control" name="id_category">
-                <?php
-                $sql_category = "SELECT * FROM category ORDER BY id_category DESC";
-                $query_category = mysqli_query($con, $sql_category);
-                while ($rows = mysqli_fetch_array($query_category)) {
-                ?>
-                  <option value="<?= $rows['id_category'] ?>"><?= $rows['category_name'] ?></option>
-                <?php } ?>
-              </select>
-            </div>
-
-            <button name="sbm" class="btn btn-primary" type="submit" style="margin-left :inherit;">Thêm sản phẩm</button>
-          </div>
-        </form>
-
-        <!-- Xử lý sửa sản phẩm -->
-
-        <!-- Xử lý sửa sản phẩm -->
-
-
-
-        <form>
-          <table class="table table-striped" id="xoasanpham" style="margin-top:-19%;overflow: scroll;display: none;width: 70%">
-            <thead>
-              <tr>
-                <th scope="col" style="width: 20%;"> ID Sản Phẩm</th>
-                <th scope="col" style="width: 45%;">Tên Sản Phẩm</th>
-                <th scope="col" style="width: 20%;">Giá Sản Phẩm</th>
-                <th scope="col" style="width: 5%;"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Tôi có câu chuyện, bạn có rượu không?</td>
-                <td>80.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Sáng hoan ca, chiều thưởng rượu</td>
-                <td>100.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Ở lại thành phố hay về quê?</td>
-                <td>120.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>Sự cô độc của bạn, thất bại mà vinh quang</td>
-                <td>90.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>Mọi nỗ lực và chờ đợi đều có ý nghĩa</td>
-                <td>100.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td>Năm tháng vội vã</td>
-                <td>150.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">7</th>
-                <td>Ngắm tuổi trẻ quay cuồng trong tĩnh lặng</td>
-                <td>130.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">8</th>
-                <td>Đến cỏ dại còn đàng hoàng mà sống</td>
-                <td>90.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">1</th>
-                <td>Tôi có câu chuyện, bạn có rượu không?</td>
-                <td>80.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Sáng hoan ca, chiều thưởng rượu</td>
-                <td>100.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Ở lại thành phố hay về quê?</td>
-                <td>120.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>Sự cô độc của bạn, thất bại mà vinh quang</td>
-                <td>90.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td>Mọi nỗ lực và chờ đợi đều có ý nghĩa</td>
-                <td>100.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td>Năm tháng vội vã</td>
-                <td>150.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">7</th>
-                <td>Ngắm tuổi trẻ quay cuồng trong tĩnh lặng</td>
-                <td>130.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-              <tr>
-                <th scope="row">8</th>
-                <td>Đến cỏ dại còn đàng hoàng mà sống</td>
-                <td>90.000</td>
-                <td><button type="button" class="btn btn-danger">Xóa</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </form>
-
-        <form>
           <?php
 
-          $sql = "SELECT * FROM products inner join category on products.id_category = category.id_category";
-          $query = mysqli_query($con, $sql) or die(mysqli_error($con));
 
+          if (isset($_POST['sbm'])) {
+            $id_product = $_POST['id_product'];
+            $name_product = $_POST['name_product'];
+            $price = $_POST['price'];
 
+            if (isset($_FILES['image'])) {
+              $file = $_FILES['image'];
+              $file_name = $file['name'];
+              move_uploaded_file($file['tmp_name'], 'image/' . $file_name);
+            }
 
+            $describe_product = $_POST['describe_product'];
+            $id_category = $_POST['id_category'];
 
+            $sql = "INSERT INTO products(id_product,name_product,price,image,describe_product,id_category) VALUES ('" . $id_product . "','" . $name_product . "','" . $price . "','" . $file_name . "','" . $describe_product . "','" . $id_category . "')";
+            $query = mysqli_query($con, $sql);
+
+            if ($query) {
+              header('location: ./admin.php');
+            } else {
+              echo "Lỗi";
+            }
+          }
           ?>
+          <!-- Xử lý thêm sản phẩm -->
 
-          <div class="container-fluid" id="cacsanpham">
-            <div class="card">
+          <form method="POST" enctype="multipart/form-data">
+            <div class="container-fluid" id="addproduct" style="display: none;">
               <div class="card-header">
-                <h2>Danh sách sản phẩm</h2>
+                <h2>Thêm sản phẩm</h2>
               </div>
-              <div class="card-body">
-                <table class="table">
-                  <thead class="thead-dark">
-                    <tr>
-                      <th>#</th>
-                      <th>Tên sản phẩm</th>
-                      <th>Hình ảnh</th>
-                      <th>Thể loại</th>
-                      <th>Giá</th>
-                      <th>Sửa</th>
-                      <th>Xóa</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                    $i = 1;
-                    while ($row = mysqli_fetch_assoc($query)) { ?>
-                      <tr>
-                        <td><?php echo $i++; ?></td>
-                        <td><?php echo $row['name_product']; ?></td>
-                        <td>
-                          <img src="./image/<?php echo $row['image']; ?>">
-                        </td>
-                        <td><?php echo $row['category_name']; ?></td>
+              <div class="form-group">
+                <label for="">ID sản phẩm</label>
+                <input type="text" name="id_product" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="">Tên sản phẩm</label>
+                <input type="text" name="name_product" class="form-control" required>
+              </div>
 
-                        <td><?php echo $row['price']; ?></td>
-                        <td><a href="admin/suasanpham.php?id=<?php echo $row['id_product']; ?>">Sửa</a></td>
-                        <td><a href="admin/xoasanpham.php?id=<?php echo $row['id_product']; ?>" onclick="xoasanpham()">Xóa</a></td>
+              <div class="form-group">
+                <label for="">Giá sản phẩm</label>
+                <input type="number" min="0" name="price" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="" style="margin-top: 2%;">Hình ảnh sản phẩm</label> <br>
+                <input type="file" name="image" style="margin-top: -1222%;">
+              </div>
+              <div class="form-group">
+                <label for="">Mô tả sản phẩm</label> <br>
+                <input type="text" name="describe_product" class="form-control">
+              </div>
+              <div class="form-group" style="width: 25%;">
+                <label for="">Thể loại:</label>
+                <?php
+                $sql = "SELECT * FROM category";
+                $query_sql = mysqli_query($con, $sql);
+                ?>
+                <select class="form-control" name="id_category">
+                  <?php
+                  $sql_category = "SELECT * FROM category ORDER BY id_category DESC";
+                  $query_category = mysqli_query($con, $sql_category);
+                  while ($rows = mysqli_fetch_array($query_category)) {
+                  ?>
+                    <option value="<?= $rows['id_category'] ?>"><?= $rows['category_name'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+
+              <button name="sbm" class="btn btn-primary" type="submit" style="margin-left :inherit;">Thêm sản phẩm</button>
+            </div>
+          </form>
+
+          <!-- Xử lý sửa sản phẩm -->
+
+          <!-- Xử lý sửa sản phẩm -->
+
+
+
+          <form>
+            <table class="table table-striped" id="xoasanpham" style="margin-top:-19%;overflow: scroll;display: none;width: 70%">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 20%;"> ID Sản Phẩm</th>
+                  <th scope="col" style="width: 45%;">Tên Sản Phẩm</th>
+                  <th scope="col" style="width: 20%;">Giá Sản Phẩm</th>
+                  <th scope="col" style="width: 5%;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Tôi có câu chuyện, bạn có rượu không?</td>
+                  <td>80.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Sáng hoan ca, chiều thưởng rượu</td>
+                  <td>100.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Ở lại thành phố hay về quê?</td>
+                  <td>120.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">4</th>
+                  <td>Sự cô độc của bạn, thất bại mà vinh quang</td>
+                  <td>90.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">5</th>
+                  <td>Mọi nỗ lực và chờ đợi đều có ý nghĩa</td>
+                  <td>100.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">6</th>
+                  <td>Năm tháng vội vã</td>
+                  <td>150.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">7</th>
+                  <td>Ngắm tuổi trẻ quay cuồng trong tĩnh lặng</td>
+                  <td>130.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">8</th>
+                  <td>Đến cỏ dại còn đàng hoàng mà sống</td>
+                  <td>90.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Tôi có câu chuyện, bạn có rượu không?</td>
+                  <td>80.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Sáng hoan ca, chiều thưởng rượu</td>
+                  <td>100.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Ở lại thành phố hay về quê?</td>
+                  <td>120.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">4</th>
+                  <td>Sự cô độc của bạn, thất bại mà vinh quang</td>
+                  <td>90.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">5</th>
+                  <td>Mọi nỗ lực và chờ đợi đều có ý nghĩa</td>
+                  <td>100.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">6</th>
+                  <td>Năm tháng vội vã</td>
+                  <td>150.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">7</th>
+                  <td>Ngắm tuổi trẻ quay cuồng trong tĩnh lặng</td>
+                  <td>130.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">8</th>
+                  <td>Đến cỏ dại còn đàng hoàng mà sống</td>
+                  <td>90.000</td>
+                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
+
+          <form>
+            <?php
+
+            $sql = "SELECT * FROM products inner join category on products.id_category = category.id_category";
+            $query = mysqli_query($con, $sql) or die(mysqli_error($con));
+
+            $sosanphamtrongtrang = 12;
+            $tranghientai = !empty($_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($tranghientai - 1) * $sosanphamtrongtrang;
+
+            $sanpham = mysqli_query($con, "SELECT * FROM products LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
+            $tongsotrang = mysqli_query($con, "SELECT * FROM products");
+
+            $tongsosp = mysqli_num_rows($tongsotrang);
+            $sotrang = ceil($tongsosp / $sosanphamtrongtrang);
+
+            ?>
+
+
+
+            <div class="container-fluid" id="cacsanpham">
+              <div class="card">
+                <div class="card-header">
+                  <h2>Danh sách sản phẩm</h2>
+                </div>
+                <div class="card-body">
+                  <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>#</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Hình ảnh</th>
+                        <th>Thể loại</th>
+                        <th>Giá</th>
+                        <th>Sửa</th>
+                        <th>Xóa</th>
                       </tr>
-                    <?php } ?>
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      <?php
+                      $i = 1;
+                      while ($row = mysqli_fetch_assoc($query)) { ?>
+                        <tr>
+                          <td><?php echo $i++; ?></td>
+                          <td><?php echo $row['name_product']; ?></td>
+                          <td>
+                            <img src="./image/<?php echo $row['image']; ?>" style="width: 222px;">
+                          </td>
+                          <td><?php echo $row['category_name']; ?></td>
+
+                          <td><?php echo $row['price']; ?></td>
+                          <td><a href="admin/suasanpham.php?id=<?php echo $row['id_product']; ?>">Sửa</a></td>
+                          <td><a href="admin/xoasanpham.php?id=<?php echo $row['id_product']; ?>" onclick="xoasanpham()">Xóa</a></td>
+                        </tr>
+                      <?php } ?>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+
+        </div>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <?php
+
+            if ($tranghientai > 1) { ?>
+              <li class="page-item">
+                <a class="page-link" href="?page=<?= $tranghientai - 1 ?><?= $para ?>" tabindex="-1" aria-disabled="true">Previous</a>
+              </li>
+            <?php } ?>
+            <?php for ($num = 1; $num <= $sotrang; $num++) { ?>
+              <?php if ($num != $tranghientai) { ?>
+                <?php if ($num > $tranghientai - 3 && $num < $tranghientai + 3) { ?>
+                  <li class="page-item"><a class="page-link" href="?page=<?= $num ?>"><?= $num ?></a></li>
+                <?php } ?>
+              <?php } else { ?>
+                <li class="page-item"><strong class="page-link" href=""><?= $num ?></strong></li>
+              <?php } ?>
+            <?php } ?>
+            <?php if ($tranghientai < $sotrang) { ?>
+              <li class="page-item">
+                <a class="page-link" href="?page=<?= $tranghientai + 1 ?>">Next</a>
+              </li>
+            <?php } ?>
+          </ul>
+        </nav>
       </div>
+
+
 
 
       <form>
