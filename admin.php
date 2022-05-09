@@ -43,7 +43,7 @@ include './connect_db.php';
               <a class="nav-link active" aria-current="page" href="index.php">Trang chủ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" onclick="listsanpham();">Sản Phẩm</a>
+              <a class="nav-link" href="./admin.php" onclick="listsanpham();">Sản Phẩm</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="./admin/donhang.php" onclick="listdonhang()" ;>Đơn Hàng</a>
@@ -68,17 +68,17 @@ include './connect_db.php';
   <!-- Navbar -->
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-4 col-lg-3" id="myScrollspy">
+      <div class="col-sm-4 col-lg-3" id="myScrollspy" style="background-color: #F0F0F0;">
         <nav class="navbar navbar-light bg-light flex-column mt-4">
           <nav class="nav nav-pills flex-column">
             <li class="nav-item">
-              <a class="nav-link" href="#danhsachsanpham" onclick="cacsanpham();">Danh sách sản phẩm</a>
-              <a class="nav-link" href="#themsanpham" onclick="addproduct();">Thêm sản phẩm</a>
+              <a class="nav-link" href="./admin.php">Danh sách sản phẩm</a>
+              <a class="nav-link" href="./admin/themsanpham.php">Thêm sản phẩm</a>
             </li>
           </nav>
         </nav>
       </div>
-      <div class="container">
+      <div class="container-fluid" style="width: 100%;">
         <div class="col">
           <!-- Xử lý thêm sản phẩm -->
 
@@ -162,132 +162,16 @@ include './connect_db.php';
 
           <!-- Xử lý sửa sản phẩm -->
 
-
-
-          <form>
-            <table class="table table-striped" id="xoasanpham" style="margin-top:-19%;overflow: scroll;display: none;width: 70%">
-              <thead>
-                <tr>
-                  <th scope="col" style="width: 20%;"> ID Sản Phẩm</th>
-                  <th scope="col" style="width: 45%;">Tên Sản Phẩm</th>
-                  <th scope="col" style="width: 20%;">Giá Sản Phẩm</th>
-                  <th scope="col" style="width: 5%;"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Tôi có câu chuyện, bạn có rượu không?</td>
-                  <td>80.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Sáng hoan ca, chiều thưởng rượu</td>
-                  <td>100.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Ở lại thành phố hay về quê?</td>
-                  <td>120.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Sự cô độc của bạn, thất bại mà vinh quang</td>
-                  <td>90.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">5</th>
-                  <td>Mọi nỗ lực và chờ đợi đều có ý nghĩa</td>
-                  <td>100.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">6</th>
-                  <td>Năm tháng vội vã</td>
-                  <td>150.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">7</th>
-                  <td>Ngắm tuổi trẻ quay cuồng trong tĩnh lặng</td>
-                  <td>130.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">8</th>
-                  <td>Đến cỏ dại còn đàng hoàng mà sống</td>
-                  <td>90.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Tôi có câu chuyện, bạn có rượu không?</td>
-                  <td>80.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Sáng hoan ca, chiều thưởng rượu</td>
-                  <td>100.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Ở lại thành phố hay về quê?</td>
-                  <td>120.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Sự cô độc của bạn, thất bại mà vinh quang</td>
-                  <td>90.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">5</th>
-                  <td>Mọi nỗ lực và chờ đợi đều có ý nghĩa</td>
-                  <td>100.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">6</th>
-                  <td>Năm tháng vội vã</td>
-                  <td>150.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">7</th>
-                  <td>Ngắm tuổi trẻ quay cuồng trong tĩnh lặng</td>
-                  <td>130.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">8</th>
-                  <td>Đến cỏ dại còn đàng hoàng mà sống</td>
-                  <td>90.000</td>
-                  <td><button type="button" class="btn btn-danger">Xóa</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-
           <form>
             <?php
-
-            $sql = "SELECT * FROM products inner join category on products.id_category = category.id_category";
-            $query = mysqli_query($con, $sql) or die(mysqli_error($con));
 
             $sosanphamtrongtrang = 12;
             $tranghientai = !empty($_GET['page']) ? $_GET['page'] : 1;
             $offset = ($tranghientai - 1) * $sosanphamtrongtrang;
 
-            $sanpham = mysqli_query($con, "SELECT * FROM products LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
+            $sanpham = mysqli_query($con, "SELECT * FROM products inner join category on products.id_category = category.id_category LIMIT " . $sosanphamtrongtrang . " OFFSET " . $offset);
             $tongsotrang = mysqli_query($con, "SELECT * FROM products");
-
+            
             $tongsosp = mysqli_num_rows($tongsotrang);
             $sotrang = ceil($tongsosp / $sosanphamtrongtrang);
 
@@ -315,10 +199,10 @@ include './connect_db.php';
                     </thead>
                     <tbody>
                       <?php
-                      $i = 1;
-                      while ($row = mysqli_fetch_assoc($query)) { ?>
+                      
+                      while ($row = mysqli_fetch_assoc($sanpham)) { ?>
                         <tr>
-                          <td><?php echo $i++; ?></td>
+                          <td><?php echo $row['id_product']; ?></td>
                           <td><?php echo $row['name_product']; ?></td>
                           <td>
                             <img src="./image/<?php echo $row['image']; ?>" style="width: 222px;">
@@ -339,12 +223,12 @@ include './connect_db.php';
 
         </div>
         <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
+          <ul class="pagination justify-content-center" id="Pagination">
             <?php
 
             if ($tranghientai > 1) { ?>
               <li class="page-item">
-                <a class="page-link" href="?page=<?= $tranghientai - 1 ?><?= $para ?>" tabindex="-1" aria-disabled="true">Previous</a>
+                <a class="page-link" href="?page=<?= $tranghientai - 1 ?>" tabindex="-1" aria-disabled="true">Trước</a>
               </li>
             <?php } ?>
             <?php for ($num = 1; $num <= $sotrang; $num++) { ?>
@@ -358,10 +242,11 @@ include './connect_db.php';
             <?php } ?>
             <?php if ($tranghientai < $sotrang) { ?>
               <li class="page-item">
-                <a class="page-link" href="?page=<?= $tranghientai + 1 ?>">Next</a>
+                <a class="page-link" href="?page=<?= $tranghientai + 1 ?>">Sau</a>
               </li>
             <?php } ?>
           </ul>
+        </form>
         </nav>
       </div>
 
